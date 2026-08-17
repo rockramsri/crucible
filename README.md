@@ -114,6 +114,46 @@ verdict stamps included. It's the same view as the animation, but you drive it.
 
 ---
 
+## Live console (UI + API)
+
+`src/Ops Layer - UI/verdict-flow` is a React (TanStack Start) console that shows
+every finding being validated as a **living lineage** — nodes light up, packets
+travel Host → Sandbox → Target → Oracle, verdicts stamp in, and the scorecard's
+FP-rate ticks up. It runs in two modes:
+
+- **Mock (default, zero backend):** replays a bundled sample entirely in the
+  browser — ideal for the hosted demo / a screen recording.
+- **Live API:** set `VITE_API_BASE` and it streams real Server-Sent Events from
+  the FastAPI backend (`src/crucible/api.py`).
+
+Run both locally:
+
+```bash
+# 1) backend — Server-Sent Events on :8000
+pip install -e ".[api]"
+./scripts/serve_api.sh
+
+# 2) UI
+cd "src/Ops Layer - UI/verdict-flow"
+cp .env.example .env          # VITE_API_BASE=http://localhost:8000
+npm install && npm run dev
+```
+
+The UI `POST`s a report to `/runs` and subscribes to `/runs/:id/stream`. The
+backend replays a posted `validation_report.json` **or** runs the real validator
+from a raw ZAP report and streams true results as each finding is decided:
+
+```bash
+curl -X POST localhost:8000/runs -H 'content-type: application/json' \
+  -d '{"zap": <raw ZAP JSON>, "target":"http://juiceshop:3000", "backend":"docker"}'
+```
+
+Live validation needs a reachable target + Docker (see Safety / scope). For
+cloud, run `crucible-api` + a sandbox runner + Juice Shop as separate services on
+a private network — Railway does not allow spawning a container per finding.
+
+---
+
 ## Benchmark — OWASP Juice Shop
 
 Same ZAP full-scan report, two runs (`--backend docker`) — the before/after that
@@ -192,10 +232,12 @@ OPENAI_API_KEY=...
 ## Layout
 
 ```
-src/crucible/                 Python package
+src/crucible/                 Python package (validator)
+src/crucible/api.py           live SSE backend for the console
+src/Ops Layer - UI/           React console (mock + live API)
 data/zap/juiceshop/           ZAP reports (input)
 data/output/juiceshop/        validation report + LLM trace (committed sample)
-scripts/                      Juice Shop + ZAP helpers
+scripts/                      Juice Shop + ZAP helpers, serve_api.sh
 docs/index.html               interactive flow (self-contained; GitHub Pages)
 docs/diagrams/                diagram + animation sources + render.sh
 docs/images/                  rendered diagrams + adaptive-sqli.gif
