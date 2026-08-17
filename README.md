@@ -13,7 +13,7 @@ artifact and a measured **false-positive rate**.
   <img src="docs/images/adaptive-sqli.gif" alt="Animated walkthrough: the deterministic UNION attempt 500s, the oracle marks it UNRESOLVED, the budget gate allows a refine, the LLM proposes a sweep tactic, code expands it into ~60 probes, one returns the injected marker, and the oracle stamps CONFIRMED." width="880">
 </p>
 
-<p align="center"><a href="#explore-it-live"><b>▶ Explore the interactive version</b></a> — pick any vuln class and trace its full run.</p>
+<p align="center"><a href="https://rockramsri.github.io/crucible/"><b>▶ Explore the interactive version</b></a> — pick any vuln class and trace its full run.</p>
 
 ---
 
@@ -106,9 +106,9 @@ bypass, CORS, …) and trace its full run in a scrollable swimlane, payloads and
 verdict stamps included. It's the same view as the animation, but you drive it.
 
 - **Locally:** just open `docs/index.html` in a browser (no server, no build).
-- **Publish free on GitHub Pages:** repo **Settings → Pages → Build and deployment
-  → Deploy from a branch → Branch: `main`, folder: `/docs`**. It goes live at
-  `https://<your-username>.github.io/crucible/`.
+- **Live now:** **[rockramsri.github.io/crucible](https://rockramsri.github.io/crucible/)**
+  (published via GitHub Pages — **Settings → Pages → Deploy from a branch →
+  `main` / `/docs`**).
 - **Deep-link a class** with the URL hash: `#sqli`, `#auth_bypass`, `#cors`,
   `#open_redirect`, `#ssrf`, …
 
