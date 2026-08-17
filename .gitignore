@@ -1,0 +1,18 @@
+# Secrets / local env
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+
+# Local run artifacts (sample reports under data/output/ are committed)
+*.db
+full_scan.log
+monitor.log
+
+# Personal notes — do not publish
+PENTEST_PROJECT_CONTEXT.md

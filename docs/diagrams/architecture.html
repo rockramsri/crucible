@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#30363d;
+    --t1:#e6edf3; --t2:#9aa5b1; --t3:#6e7681;
+    --green:#3fb950; --red:#f85149; --purple:#bc8cff; --yellow:#d29922; --blue:#58a6ff; --cyan:#39c5cf;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{background:var(--bg); color:var(--t1);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{width:1320px; padding:30px 34px 26px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  h1{font-size:23px; font-weight:650; letter-spacing:.2px}
+  .sub{font-size:14px; color:var(--t2); margin-top:7px}
+  .sub b{color:var(--t1); font-weight:600}
+
+  /* pipeline strip */
+  .pipe{display:flex; align-items:center; gap:0; margin:22px 0 26px; flex-wrap:nowrap}
+  .stage{border:1px solid var(--border); border-left:2px solid #3b4048; background:var(--panel);
+    border-radius:7px; padding:9px 13px; font-size:13px; font-weight:560; white-space:nowrap}
+  .stage.loop{border-left-color:var(--purple); background:var(--panel2); font-weight:680}
+  .sep{color:var(--t3); padding:0 8px; font-size:14px}
+
+  /* trust boundary columns */
+  .cols{display:grid; grid-template-columns:1fr 152px 1fr 150px 0.86fr; align-items:stretch}
+  .panel{border:1px solid var(--border); border-radius:11px; background:var(--panel); overflow:hidden; display:flex; flex-direction:column}
+  .phead{padding:12px 15px 11px; border-bottom:1px solid var(--border)}
+  .phead .k{font-size:12px; font-weight:700; letter-spacing:.7px; text-transform:uppercase}
+  .phead .tag{font-size:11.5px; color:var(--t2); margin-top:3px}
+  .host .phead{border-bottom-color:#1f6feb55}
+  .host .k{color:var(--blue)}
+  .box .k{color:var(--yellow)}
+  .tgt .k{color:var(--cyan)}
+  .plist{padding:13px 15px; display:flex; flex-direction:column; gap:9px; flex:1}
+  .item{border:1px solid var(--border); border-left:3px solid #3b4048; background:var(--panel2);
+    border-radius:8px; padding:9px 11px}
+  .item .n{font-size:13.5px; font-weight:600}
+  .item .d{font-size:12px; color:var(--t2); margin-top:3px; line-height:1.45}
+  .item.ai{border-left-color:var(--purple)}
+  .item.orc{border-left-color:var(--green)}
+  .foot{padding:0 15px 13px}
+  .note{font-size:11.5px; color:var(--t3)}
+  .chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:2px}
+  .chip{font-size:11px; color:var(--t2); border:1px solid var(--border); border-radius:6px; padding:3px 7px; background:#0f141b}
+  .chip.warnet{color:var(--red); border-color:#8e2b2688}
+
+  /* arrow gutters */
+  .gut{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; position:relative; padding:0 6px}
+  .gut.bound{border-left:1.5px dashed #4b5563; margin-left:0}
+  .arw{font-size:26px; color:var(--t2); line-height:1}
+  .arw.up{color:var(--t3); font-size:20px}
+  .lbl{font-size:11px; color:var(--t2); text-align:center; line-height:1.4}
+  .lbl b{color:var(--t1); font-weight:600}
+  .boundtag{position:absolute; top:-4px; left:50%; transform:translateX(-50%);
+    font-size:10px; letter-spacing:.5px; color:#8b98a5; background:var(--bg); padding:2px 7px;
+    border:1px solid var(--border); border-radius:999px; white-space:nowrap}
+
+  .cap{margin-top:24px; display:flex; align-items:center; gap:10px}
+  .cap .bar{width:3px; height:34px; background:var(--purple); border-radius:2px}
+  .cap .txt{font-size:13.5px; color:var(--t2)}
+  .cap .txt b{color:var(--t1); font-weight:650}
+  .brand{position:absolute; top:34px; right:38px; font-size:12px; color:var(--t3); letter-spacing:.6px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand mono">crucible</div>
+    <h1>Crucible — architecture &amp; trust boundary</h1>
+    <div class="sub"><b>AI proposes, deterministic logic disposes.</b> The LLM and the oracle live on the trusted host; every attack request is executed inside a throwaway, network-locked sandbox that holds no secrets.</div>
+
+    <div class="pipe">
+      <div class="stage">ZAP JSON</div><span class="sep">&#8594;</span>
+      <div class="stage">Ingest</div><span class="sep">&#8594;</span>
+      <div class="stage">Normalize</div><span class="sep">&#8594;</span>
+      <div class="stage">Findings</div><span class="sep">&#8594;</span>
+      <div class="stage">Planner</div><span class="sep">&#8594;</span>
+      <div class="stage loop">Validator loop</div><span class="sep">&#8594;</span>
+      <div class="stage">Oracle</div><span class="sep">&#8594;</span>
+      <div class="stage">Report</div>
+    </div>
+
+    <div class="cols">
+      <!-- HOST -->
+      <div class="panel host">
+        <div class="phead">
+          <div class="k">Host &middot; trusted</div>
+          <div class="tag">generation + judgment &middot; holds API keys</div>
+        </div>
+        <div class="plist">
+          <div class="item">
+            <div class="n">Planner &mdash; playbooks</div>
+            <div class="d">Per vuln-class: builds baseline / attack / control steps + an oracle.</div>
+          </div>
+          <div class="item ai">
+            <div class="n">Adaptive LLM &middot; <span class="mono">pydantic-ai</span></div>
+            <div class="d">Only on <b>unresolved</b> findings. Reads responses, proposes a payload or <b>tactic</b>. Never returns a verdict.</div>
+          </div>
+          <div class="item orc">
+            <div class="n">Oracle &mdash; deterministic</div>
+            <div class="d">Asserts the bug&rsquo;s <b>effect</b>. The only thing that can stamp <span class="mono">confirmed</span>.</div>
+          </div>
+          <div class="item">
+            <div class="n">Report + SQLite log</div>
+            <div class="d">JSON verdicts &middot; markdown scorecard &middot; append-only audit trail.</div>
+          </div>
+        </div>
+        <div class="foot"><div class="note">Secrets stay here. The sandbox never sees them.</div></div>
+      </div>
+
+      <!-- host <-> sandbox gutter (trust boundary) -->
+      <div class="gut bound">
+        <div class="boundtag">trust boundary</div>
+        <div class="arw">&#8594;</div>
+        <div class="lbl"><b>plan</b> on stdin</div>
+        <div class="arw up">&#8592;</div>
+        <div class="lbl"><b>raw results</b> on stdout</div>
+      </div>
+
+      <!-- SANDBOX -->
+      <div class="panel box">
+        <div class="phead">
+          <div class="k">Ephemeral sandbox &middot; untrusted</div>
+          <div class="tag">one container per finding &middot; <span class="mono">--rm</span></div>
+        </div>
+        <div class="plist">
+          <div class="item">
+            <div class="n"><span class="mono">verify.py</span> &mdash; step executor</div>
+            <div class="d">stdlib + <span class="mono">httpx</span> only. Replays steps, returns status / length / headers. No logic, no LLM.</div>
+          </div>
+          <div class="item">
+            <div class="n">Locked down at launch</div>
+            <div class="chips">
+              <span class="chip mono">--cap-drop ALL</span>
+              <span class="chip mono">--read-only</span>
+              <span class="chip mono">--pids-limit</span>
+              <span class="chip mono">--memory</span>
+              <span class="chip mono">no-new-privileges</span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="n">Isolated</div>
+            <div class="chips">
+              <span class="chip warnet">no internet egress</span>
+              <span class="chip">no secrets</span>
+              <span class="chip">destroyed after each finding</span>
+            </div>
+          </div>
+        </div>
+        <div class="foot"><div class="note">If it&rsquo;s compromised, there&rsquo;s nothing to steal and nowhere to call home.</div></div>
+      </div>
+
+      <!-- sandbox -> target gutter -->
+      <div class="gut">
+        <div class="arw">&#8594;</div>
+        <div class="lbl">HTTP only<br/>private <b class="mono">pentest</b> network</div>
+      </div>
+
+      <!-- TARGET -->
+      <div class="panel tgt">
+        <div class="phead">
+          <div class="k">Target</div>
+          <div class="tag">self-hosted, you own it</div>
+        </div>
+        <div class="plist">
+          <div class="item">
+            <div class="n">OWASP Juice Shop</div>
+            <div class="d">Intentionally vulnerable app, bound to <span class="mono">127.0.0.1:3000</span>, reachable only over the private Docker network.</div>
+          </div>
+          <div class="item">
+            <div class="n">Scope guardrail</div>
+            <div class="d">Never a production or third-party host &mdash; the sandbox can only talk to this one container.</div>
+          </div>
+        </div>
+        <div class="foot"><div class="note">Same box the scanner tested, so verdicts are apples-to-apples.</div></div>
+      </div>
+    </div>
+
+    <div class="cap">
+      <div class="bar"></div>
+      <div class="txt">The <b>validator loop</b> is the only stateful part: run &#8594; judge &#8594; (if unresolved) let the LLM refine &#8594; re-run, until the oracle decides or the budget runs out.</div>
+    </div>
+  </div>
+</body>
+</html>

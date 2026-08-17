@@ -1,58 +1,133 @@
 # Crucible
 
-An agentic **validation layer** for web-app scanner output. It ingests a scan
-report (OWASP ZAP today), then for each finding it **re-exploits the target in an
-ephemeral, locked-down Docker sandbox** and returns an honest verdict —
-`confirmed` / `false_positive` / `inconclusive` / `agent_failure` — with a
-proof artifact and a measured **false-positive rate**.
+**An agentic validation layer for web-app scanner output.** Crucible ingests a
+scan report (OWASP ZAP today), then for each finding it **re-exploits the target
+in an ephemeral, locked-down sandbox** and returns an honest verdict —
+`confirmed` / `false_positive` / `inconclusive` / `agent_failure` — with a proof
+artifact and a measured **false-positive rate**.
 
-Detection is what a scanner does. Crucible proves (or disproves) each finding.
+> Detection is what a scanner does. Crucible *proves — or disproves* — each finding.
+> **AI proposes, deterministic logic disposes.**
+
+---
+
+## Architecture
+
+<p align="center">
+  <img src="docs/images/architecture.png" alt="Crucible architecture: a host/sandbox trust boundary. The LLM and oracle run on the trusted host; a throwaway, network-locked sandbox executes every attack request." width="960">
+</p>
+
+Two ideas do all the work:
+
+1. **A trust boundary.** Generation and judgment live on the **host** (the
+   planner, the optional LLM, the oracle, your API keys). Every attack request is
+   executed inside an **ephemeral sandbox** — one container per finding, launched
+   with `--cap-drop ALL`, `--read-only`, pid/memory caps, **no internet egress**,
+   and **no secrets**. It runs `verify.py` (stdlib + `httpx`) and nothing else. If
+   it were ever compromised, there is nothing to steal and nowhere to call home.
+2. **The oracle owns the verdict.** A deterministic Python check asserts the
+   bug's **effect** (a marker we injected surfaces where it shouldn't; a redirect
+   points off-site). The LLM can *propose* a payload or a tactic, but it can
+   **never** stamp `confirmed`. That single rule is what keeps the false-positive
+   rate honest — and is exactly the guardrail a real vendor shipped without when
+   its XSS sub-agent "executed the script itself" and reported a hallucinated bug.
+
+The pipeline reads left to right; the **validator loop** is the only stateful part:
+
+```
+ZAP JSON → Ingest → Normalize → Findings → Planner → Validator loop → Oracle → Report
+```
+
+- **Ingest** (`src/crucible/ingest/zap.py`) — ZAP JSON → canonical `Finding`s, keeping only the target host. New scanner = new adapter.
+- **Planner** (`src/crucible/playbooks/`) — per vuln-class: build baseline / attack / control HTTP steps + an oracle.
+- **Sandbox** (`src/crucible/sandbox.py` + `runner/verify.py`) — dumb, hardened, no-internet executor. Returns raw responses; decides nothing.
+- **Oracle** (in each playbook) — deterministic verdict on the observed effect.
+- **Refine** (`src/crucible/agent.py`, optional) — only on **unresolved** findings, an LLM proposes a payload/tactic under a per-finding budget. Off automatically with no API key.
+- **Report** (`src/crucible/report.py`, `store.py`) — JSON verdicts + Markdown scorecard + append-only SQLite audit log.
+
+---
+
+## The three outcomes
+
+Every finding ends in one of three stories. Together they *are* the pitch:
+Crucible confirms real bugs, filters scanner noise with evidence, and only spends
+an LLM when deterministic logic gets stuck.
+
+### 1 · Deterministic confirm
+
+Config-check classes (open redirect, CORS, info-disclosure) need one replay and
+one fixed check — reasoning would add nothing, so **the loop never reaches the LLM**.
+
+<p align="center">
+  <img src="docs/images/flow-deterministic-confirm.png" alt="Open-redirect flow: plan → sandbox replay → target 302 with off-site Location → oracle CONFIRMED." width="900">
+</p>
+
+### 2 · Deterministic false positive — *the FP-rate story*
+
+A status-code-only scanner sees `403 → 200` on a `/%2e/` path and cries "bypass."
+The effect-oracle checks the **body**: it's the Angular SPA shell (len 9393), not
+the protected file. Dropped, with a reason. **23 of 26** Juice Shop findings land
+here — that filtered noise is the measured false-positive rate.
+
+<p align="center">
+  <img src="docs/images/flow-false-positive.png" alt="403-bypass flow: direct 403 vs bypass 200, but the 200 body is the SPA shell, not the file — oracle FALSE POSITIVE." width="900">
+</p>
+
+### 3 · Adaptive confirm — *the LLM earns its keep*
+
+The generic UNION attempt 500s (wrong breakout / column count), so the oracle
+returns `UNRESOLVED`. The budget gate allows a refine; the LLM reads the error +
+the class `DOMAIN_BRIEF`, diagnoses the cause, and asks for a **tactic**
+(`sweep`). Deterministic code expands that into ~60 concrete probes; one
+(`'))` breakout, 9 columns) returns our marker, and the **oracle** — not the LLM —
+stamps `confirmed`.
+
+<p align="center">
+  <img src="docs/images/flow-adaptive-sqli.png" alt="Adaptive SQLi flow: deterministic 500 → UNRESOLVED → budget gate → LLM proposes a sweep tactic → code expands ~60 probes → one returns the marker → oracle CONFIRMED." width="900">
+</p>
+
+This is the finding a deterministic-only run leaves `INCONCLUSIVE`. **Zero
+hallucination:** the LLM only ever proposed a tactic; the effect-oracle did the
+confirming.
+
+---
+
+## Benchmark — OWASP Juice Shop
+
+Same ZAP full-scan report, two runs (`--backend docker`) — the before/after that
+shows the adaptive layer earning its keep:
+
+| Run | Confirmed | False positives | Inconclusive | Skipped | FP-rate |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Deterministic only | 2 | 23 | **1** | 8 | — |
+| Adaptive (`openai:gpt-4.1`) | **3** | 23 | **0** | 8 | **88.5%** |
+
+The delta is the search SQLi from scenario 3. FP-rate = `FP / (confirmed + FP)`;
+`inconclusive` and `agent_failure` are excluded so a timeout can never masquerade
+as a clean result. Confirmed true positives carry request/response proof; the 23
+false positives are correctly filtered (SPA-shell "backup files", the `/%2e/`
+403-"bypass", wildcard CORS that never reflects an attacker Origin).
+
+> Note: current Gemini models refuse to generate SQLi payloads even for clearly
+> authorized testing, so the adaptive layer defaults to OpenAI. Any pydantic-ai
+> model string works (`openai:gpt-4.1`, `anthropic:claude-...`, `google:gemini-3.6-flash`).
+
+---
 
 ## Safety / scope (non-negotiable)
 
 - Only run this against **intentionally-vulnerable practice apps you host
   yourself** (OWASP Juice Shop, DVWA, or your own deliberately-vulnerable app).
 - **Never** point it at real, production, or third-party systems you do not own.
-- The sandbox that sends the attacks is **network-locked to the target and has no
-  internet egress**; it holds no secrets and runs no LLM.
-
-## How it works
-
-```
-ingest -> normalize -> plan (playbook) -> run in sandbox -> oracle -> report
-```
-
-- **Ingest** (`src/crucible/ingest/zap.py`): ZAP JSON → canonical `Finding`s, keeping only the
-  target host (external CDN noise is dropped). New sources = new adapter.
-- **Plan** (`src/crucible/playbooks/`): each vuln class has a deterministic playbook that turns
-  a finding into a baseline/attack/control set of HTTP steps plus an oracle.
-- **Sandbox** (`src/crucible/sandbox.py` + `runner/verify.py`): a dumb, hardened, no-internet
-  container runs the steps and returns raw responses. It never decides anything.
-- **Oracle** (in each playbook): deterministic Python decides the verdict. The LLM
-  is never allowed to declare a true positive.
-- **Refine** (`src/crucible/agent.py`, optional): if the oracle can't decide, an LLM
-  may propose a better payload or classify the case — bounded by a per-finding
-  budget. Disabled automatically if no matching API key is set.
-- **Report** (`src/crucible/report.py`, `store.py`): JSON report + Markdown scorecard + an
-  append-only SQLite audit log.
-
-The LLM and the oracle run on the host; only `verify.py` runs inside the box.
-
-## Layout
-
-```
-src/crucible/                 Python package
-data/zap/juiceshop/           ZAP reports (input)
-data/output/juiceshop/        validation report + LLM trace (output)
-scripts/                      Juice Shop + ZAP helpers
-```
+- The sandbox is **network-locked to the target and has no internet egress**; it
+  holds no secrets and runs no LLM.
 
 ## Install
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e .
-cp .env.example .env          # then paste the matching provider key
+cp .env.example .env          # then paste the provider key that matches ADAPTIVE_MODEL
 ```
 
 ## Usage
@@ -64,7 +139,7 @@ SCAN=baseline ./scripts/run_zap_juiceshop.sh   # ~1–2 min, passive
 SCAN=full     ./scripts/run_zap_juiceshop.sh   # ~20–35 min, active
 ```
 
-Validate a report (Juice Shop must still be on the `pentest` Docker network):
+Validate a report (Juice Shop must still be up on the `pentest` Docker network):
 
 ```bash
 # Real sandbox: one hardened container per finding, over the private network.
@@ -76,9 +151,8 @@ python -m crucible.cli data/zap/juiceshop/juiceshop_zap_full.json \
     --target http://juiceshop:3000 --backend local --sandbox-base http://localhost:3000
 ```
 
-After `pip install -e .` you can also run `crucible ...` instead of `python -m crucible.cli ...`.
-
-Enable the optional LLM refine step by putting a key in `.env`:
+After `pip install -e .` you can also just run `crucible ...`. Enable the adaptive
+layer by putting a key in `.env`:
 
 ```bash
 # .env
@@ -86,41 +160,29 @@ ADAPTIVE_MODEL=openai:gpt-4.1
 OPENAI_API_KEY=...
 ```
 
-Current Gemini models refuse to generate SQLi payloads even for authorized testing,
-so the adaptive layer defaults to OpenAI. Any pydantic-ai model string works
-(`openai:gpt-4.1`, `anthropic:claude-...`, `google:gemini-3.6-flash`).
-
 ## Output
 
 - Console: a scorecard (confirmed / false positives / FP-rate).
-- `data/output/juiceshop/validation_report.json`: structured verdicts with proof.
-- `data/output/juiceshop/llm_trace.jsonl`: per-iteration LLM/oracle trace.
-- `data/output/juiceshop/runs.db`: local SQLite audit trail (gitignored).
+- `data/output/juiceshop/validation_report.json` — structured verdicts with proof.
+- `data/output/juiceshop/llm_trace.jsonl` — per-iteration LLM/oracle trace (great for eyeballing the adaptive loop).
+- `data/output/juiceshop/runs.db` — local SQLite audit trail (gitignored).
 
-### Benchmark (OWASP Juice Shop)
+## Layout
 
-Same ZAP full-scan report, two runs (`--backend docker`) — the before/after that
-shows the adaptive layer earning its keep:
-
-- Deterministic only (no LLM): 2 confirmed, 23 false positives, **1 inconclusive**, 8 skipped.
-- With the adaptive layer (`openai:gpt-4.1`): **3 confirmed**, 23 false positives, **0 inconclusive**, 8 skipped — **88.5%** false-positive rate.
-
-The delta is the search SQLi. The deterministic generic UNION attempts return 500
-(unresolved); the adaptive layer diagnoses "wrong breakout / column count",
-requests a `sweep` tactic, the harness expands it to ~60 concrete probes, runs them
-in one sandbox call, and the **deterministic oracle** confirms the one that returns
-our injected marker. Zero hallucination — the LLM proposes the tactic, code does
-the search, and the oracle (not the LLM) stamps the verdict.
-
-Confirmed true positives carry proof artifacts (request/response); the 23 false
-positives are correctly filtered (e.g. "backup files" that return the Angular app
-shell, a `/%2e/` 403-"bypass" that doesn't retrieve the file, wildcard CORS).
+```
+src/crucible/                 Python package
+data/zap/juiceshop/           ZAP reports (input)
+data/output/juiceshop/        validation report + LLM trace (committed sample)
+scripts/                      Juice Shop + ZAP helpers
+docs/diagrams/                diagram sources (.html) + render.sh
+docs/images/                  rendered diagrams used above
+```
 
 ## Extending
 
-- **New scanner**: add an adapter under `src/crucible/ingest/` that returns `Finding`s.
-- **New vuln class**: add a `VulnClass`, write a `playbooks/<class>.py` with
-  `build_steps()` + `oracle()`, and register it in `playbooks/__init__.py`.
+- **New scanner** — add an adapter under `src/crucible/ingest/` that returns `Finding`s.
+- **New vuln class** — add a `VulnClass`, write `playbooks/<class>.py` with `build_steps()` + `oracle()`, and register it in `playbooks/__init__.py`.
+- **Regenerate the diagrams** — edit the HTML in `docs/diagrams/` and run `./docs/diagrams/render.sh` (needs Chrome + `pip install pillow`).
 
 ## Verdict taxonomy
 
@@ -132,13 +194,14 @@ shell, a `/%2e/` 403-"bypass" that doesn't retrieve the file, wildcard CORS).
 
 ## Create the GitHub repo
 
-This folder is ready to become `crucible` on GitHub. From here:
+This folder is ready to become `crucible` on GitHub:
 
 ```bash
-git init
 git add .
-git commit -m "Initial commit: Crucible"
+git commit -m "Crucible: docs, diagrams, and src/ layout"
 gh repo create crucible --public --source=. --remote=origin --push
 ```
 
-`.env`, `.venv/`, `*.db`, and `PENTEST_PROJECT_CONTEXT.md` are gitignored. The Juice Shop ZAP scans and the sample validation output under `data/` are included on purpose.
+`.env`, `.venv/`, `*.db`, and `PENTEST_PROJECT_CONTEXT.md` are gitignored. The
+Juice Shop ZAP scans, the sample validation output, and the diagrams under
+`data/` and `docs/` are committed on purpose.

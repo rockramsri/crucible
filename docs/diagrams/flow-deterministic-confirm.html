@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#30363d;
+    --t1:#e6edf3; --t2:#9aa5b1; --t3:#6e7681;
+    --green:#3fb950; --red:#f85149; --purple:#bc8cff; --yellow:#d29922; --blue:#58a6ff; --cyan:#39c5cf;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{background:var(--bg); color:var(--t1);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{width:1080px; padding:30px 34px 26px; position:relative}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px;
+    background:#0f141b; border:1px solid var(--border); border-radius:5px; padding:1px 6px; color:#c9d4e0}
+  h1{font-size:21px; font-weight:650; letter-spacing:.2px}
+  .sub{font-size:13.5px; color:var(--t2); margin-top:7px}
+  .tags{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
+  .kind{font-size:11px; letter-spacing:.5px; border:1px solid var(--border); color:var(--t2);
+    border-radius:999px; padding:4px 11px; background:var(--panel)}
+  .kind.det{color:var(--cyan); border-color:#2b6f7788}
+  .brand{position:absolute; top:34px; right:38px; font-size:12px; color:var(--t3); letter-spacing:.6px}
+
+  .steps{margin-top:20px}
+  .step{display:grid; grid-template-columns:150px 1fr auto; align-items:center; gap:16px;
+    background:var(--panel); border:1px solid var(--border); border-left-width:3px; border-radius:10px; padding:13px 15px}
+  .step.n{border-left-color:#3b4048}
+  .step.info{border-left-color:var(--blue)}
+  .step.ok{border-left-color:var(--green)}
+  .lane{font-size:11px; color:var(--t2); font-weight:700; letter-spacing:.6px; text-transform:uppercase}
+  .lane small{display:block; color:var(--t3); font-weight:500; text-transform:none; letter-spacing:0; font-size:11px; margin-top:3px}
+  .title{font-size:15px; font-weight:600}
+  .detail{font-size:12.8px; color:var(--t2); margin-top:4px; line-height:1.5}
+  .badge{font-size:11.5px; font-weight:800; letter-spacing:.6px; padding:5px 12px; border-radius:999px; border:1px solid; white-space:nowrap}
+  .b-ok{color:var(--green); border-color:#238636; background:#0e2a17}
+  .arrow{height:15px; display:flex; align-items:center; justify-content:center; color:var(--t3); font-size:15px}
+
+  .result{margin-top:18px; border:1px solid var(--border); border-left:3px solid var(--green);
+    border-radius:10px; background:var(--panel2); padding:13px 16px; display:flex; gap:12px; align-items:flex-start}
+  .result .h{font-size:13px; font-weight:700; color:var(--green); letter-spacing:.3px; white-space:nowrap}
+  .result .t{font-size:13px; color:var(--t2); line-height:1.5}
+  .result .t b{color:var(--t1); font-weight:600}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand mono">crucible</div>
+    <h1>Scenario A &middot; deterministic <span style="color:var(--green)">confirm</span> &mdash; open redirect</h1>
+    <div class="sub">A config-check class: one replay, one fixed check. No LLM in the loop &mdash; reasoning would add nothing.</div>
+    <div class="tags"><span class="kind det">config-check class</span><span class="kind">built</span><span class="kind">real run: <span class="mono">External Redirect</span></span></div>
+
+    <div class="steps">
+      <div class="step n">
+        <div class="lane">Host<small>plan</small></div>
+        <div>
+          <div class="title">Replay the flagged redirect with our own marker</div>
+          <div class="detail">Two probes, follow-redirects <b>off</b>: our marker <code>to=https://oob-validator.example/</code> and the scanner&rsquo;s original payload.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step n">
+        <div class="lane">Sandbox<small>run</small></div>
+        <div>
+          <div class="title">Send baseline + attack probes</div>
+          <div class="detail"><span class="mono">verify.py</span> issues the GETs over the private network and returns raw status + <code>Location</code>.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step info">
+        <div class="lane">Target<small>respond</small></div>
+        <div>
+          <div class="title">302 with an off-site <code>Location</code></div>
+          <div class="detail">baseline <code>406</code> &middot; scanner payload &rarr; <code>302</code>, <code>Location: https://2877&hellip;.owasp.org/&hellip;</code></div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step ok">
+        <div class="lane">Oracle<small>judge effect</small></div>
+        <div>
+          <div class="title">The redirect host is not our host</div>
+          <div class="detail">A 3xx whose <code>Location</code> points off-site is the bug&rsquo;s actual effect &mdash; not a guess.</div>
+        </div>
+        <div class="badge b-ok">CONFIRMED</div>
+      </div>
+    </div>
+
+    <div class="result">
+      <div class="h">PROOF</div>
+      <div class="t">The <b>302 + off-site Location</b> is captured as the artifact. Deterministic classes like open redirect, CORS, and info-disclosure stop right here &mdash; <b>the loop never reaches the LLM.</b></div>
+    </div>
+  </div>
+</body>
+</html>

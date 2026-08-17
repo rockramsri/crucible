@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#30363d;
+    --t1:#e6edf3; --t2:#9aa5b1; --t3:#6e7681;
+    --green:#3fb950; --red:#f85149; --purple:#bc8cff; --yellow:#d29922; --blue:#58a6ff; --cyan:#39c5cf;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{background:var(--bg); color:var(--t1);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{width:1120px; padding:30px 34px 26px; position:relative}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px;
+    background:#0f141b; border:1px solid var(--border); border-radius:5px; padding:1px 6px; color:#c9d4e0}
+  h1{font-size:21px; font-weight:650; letter-spacing:.2px}
+  .sub{font-size:13.5px; color:var(--t2); margin-top:7px}
+  .sub b{color:var(--t1); font-weight:600}
+  .brand{position:absolute; top:34px; right:38px; font-size:12px; color:var(--t3); letter-spacing:.6px}
+
+  .legend{display:flex; gap:16px; margin-top:14px; flex-wrap:wrap; align-items:center}
+  .lg{display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--t2)}
+  .dot{width:9px; height:9px; border-radius:999px; display:inline-block}
+
+  .steps{margin-top:18px}
+  .step{display:grid; grid-template-columns:158px 1fr auto; align-items:center; gap:16px;
+    background:var(--panel); border:1px solid var(--border); border-left-width:3px; border-radius:10px; padding:12px 15px}
+  .step.n{border-left-color:#3b4048}
+  .step.info{border-left-color:var(--blue)}
+  .step.bad{border-left-color:var(--red)}
+  .step.warn{border-left-color:var(--yellow)}
+  .step.ai{border-left-color:var(--purple); background:var(--panel2)}
+  .step.ok{border-left-color:var(--green)}
+  .lane{font-size:11px; color:var(--t2); font-weight:700; letter-spacing:.6px; text-transform:uppercase}
+  .lane small{display:block; color:var(--t3); font-weight:500; text-transform:none; letter-spacing:0; font-size:11px; margin-top:3px}
+  .lane .ll{color:var(--purple)}
+  .title{font-size:14.5px; font-weight:600}
+  .detail{font-size:12.6px; color:var(--t2); margin-top:4px; line-height:1.5}
+  .badge{font-size:11px; font-weight:800; letter-spacing:.6px; padding:5px 11px; border-radius:999px; border:1px solid; white-space:nowrap}
+  .b-bad{color:var(--red); border-color:#8e2b26; background:#2a1211}
+  .b-warn{color:var(--yellow); border-color:#7a5a12; background:#2a2109}
+  .b-ok{color:var(--green); border-color:#238636; background:#0e2a17}
+  .arrow{height:14px; display:flex; align-items:center; justify-content:center; color:var(--t3); font-size:14px}
+
+  .loop{display:flex; align-items:center; justify-content:center; margin:7px 0}
+  .loop .pill{display:inline-flex; align-items:center; gap:8px; border:1px dashed var(--purple);
+    color:var(--purple); background:#1a1430; border-radius:999px; padding:6px 15px; font-size:12px; font-weight:600}
+
+  .result{margin-top:18px; border:1px solid var(--border); border-left:3px solid var(--purple);
+    border-radius:10px; background:var(--panel2); padding:14px 16px; display:flex; gap:12px; align-items:flex-start}
+  .result .h{font-size:13px; font-weight:700; color:var(--purple); letter-spacing:.3px; white-space:nowrap}
+  .result .t{font-size:13px; color:var(--t2); line-height:1.55}
+  .result .t b{color:var(--t1); font-weight:600}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand mono">crucible</div>
+    <h1>Scenario C &middot; adaptive <span style="color:var(--green)">confirm</span> &mdash; UNION SQLi on <span class="mono" style="font-size:16px">/rest/products/search</span></h1>
+    <div class="sub">The hero case: the LLM proposes a <b>tactic</b>, deterministic code expands it, and the <b>oracle</b> &mdash; never the LLM &mdash; stamps the verdict.</div>
+    <div class="legend">
+      <span class="lg"><span class="dot" style="background:#3b4048"></span>deterministic step</span>
+      <span class="lg"><span class="dot" style="background:var(--purple)"></span>LLM / adaptive</span>
+      <span class="lg"><span class="dot" style="background:var(--red)"></span>unresolved</span>
+      <span class="lg"><span class="dot" style="background:var(--yellow)"></span>budget gate</span>
+      <span class="lg"><span class="dot" style="background:var(--green)"></span>confirmed by oracle</span>
+    </div>
+
+    <div class="steps">
+      <div class="step n">
+        <div class="lane">Host<small>plan &middot; deterministic</small></div>
+        <div>
+          <div class="title">Generic UNION attempt</div>
+          <div class="detail"><code>q=nomatch' UNION SELECT 'mark'-- -</code> at 1 and 3 columns, plus a baseline and control.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step n">
+        <div class="lane">Sandbox<small>run #1</small></div>
+        <div>
+          <div class="title">Send baseline &middot; attack &middot; control</div>
+          <div class="detail">One hardened container replays the three steps.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step info">
+        <div class="lane">Target<small>respond</small></div>
+        <div>
+          <div class="title">Baseline 200, attack 500</div>
+          <div class="detail">baseline <code>200</code> (len 30) &middot; both UNION attempts <code>500</code> (len 982) &mdash; a SQL syntax error, no marker echoed.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step bad">
+        <div class="lane">Oracle<small>judge effect</small></div>
+        <div>
+          <div class="title">No marker + 500 &rarr; can&rsquo;t prove it yet</div>
+          <div class="detail">A server error is not proof of injection. Breakout or column-count is wrong &mdash; hand it to the adaptive layer.</div>
+        </div>
+        <div class="badge b-bad">UNRESOLVED</div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step warn">
+        <div class="lane">Budget<small>gate</small></div>
+        <div>
+          <div class="title">Attempts 3 &rarr; 2 left</div>
+          <div class="detail">Spend a refine only because this is <b>unresolved</b> (not a confident FP). Exhaust the budget &rarr; <code>INCONCLUSIVE</code>, never FP-by-timeout.</div>
+        </div>
+        <div></div>
+      </div>
+
+      <div class="loop"><span class="pill">&#8635;&nbsp; adaptive refine &middot; attempt #2 (unresolved only)</span></div>
+
+      <div class="step ai">
+        <div class="lane"><span class="ll">Host &middot; LLM</span><small>gpt-4.1</small></div>
+        <div>
+          <div class="title">Diagnose, then propose a tactic &mdash; not a verdict</div>
+          <div class="detail">Reads the <code>500</code> + the class <code>DOMAIN_BRIEF</code>. Ranked hypotheses (&ldquo;wrong breakout / #cols&rdquo;, conf 0.9) &rarr; asks for tactic <code>sweep</code>.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step ai">
+        <div class="lane">Harness<small>code expands</small></div>
+        <div>
+          <div class="title">Expand the sweep &rarr; ~60 concrete probes</div>
+          <div class="detail">Breakouts <code>'</code> <code>')</code> <code>'))</code> <code>"</code> <code>")</code> &times; 1&ndash;12 columns, with the marker in <b>every</b> column. The LLM never writes the payloads.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step ai">
+        <div class="lane">Sandbox<small>run #2</small></div>
+        <div>
+          <div class="title">Fire all ~60 probes in one sandbox call</div>
+          <div class="detail">Same locked-down container contract &mdash; just more steps.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step info">
+        <div class="lane">Target<small>respond</small></div>
+        <div>
+          <div class="title">One probe breaks through</div>
+          <div class="detail">59 &times; <code>500</code>, but <code>sweep_qpp_9</code> &mdash; <code>'))</code> breakout, <b>9 columns</b> &mdash; returns <code>200</code> (len 258) with our marker in the results.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step ok">
+        <div class="lane">Oracle<small>judge effect</small></div>
+        <div>
+          <div class="title">Injected marker present, absent in baseline</div>
+          <div class="detail">The marker can only appear via injection &mdash; the bug&rsquo;s effect is observed independently of anything the LLM said.</div>
+        </div>
+        <div class="badge b-ok">CONFIRMED</div>
+      </div>
+    </div>
+
+    <div class="result">
+      <div class="h">ZERO&nbsp;HALLUCINATION</div>
+      <div class="t">The LLM only ever proposed a <b>tactic</b> (&ldquo;sweep breakouts and column counts&rdquo;). Deterministic code did the search and the <b>effect-oracle</b> stamped <code>confirmed</code> on the one probe that echoed the marker. This is the finding the deterministic-only run left <code>INCONCLUSIVE</code> &mdash; the adaptive layer earning its keep.</div>
+    </div>
+  </div>
+</body>
+</html>

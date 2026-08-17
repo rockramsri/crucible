@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#30363d;
+    --t1:#e6edf3; --t2:#9aa5b1; --t3:#6e7681;
+    --green:#3fb950; --red:#f85149; --purple:#bc8cff; --yellow:#d29922; --blue:#58a6ff; --cyan:#39c5cf;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{background:var(--bg); color:var(--t1);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{width:1080px; padding:30px 34px 26px; position:relative}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px;
+    background:#0f141b; border:1px solid var(--border); border-radius:5px; padding:1px 6px; color:#c9d4e0}
+  h1{font-size:21px; font-weight:650; letter-spacing:.2px}
+  .sub{font-size:13.5px; color:var(--t2); margin-top:7px}
+  .sub b{color:var(--t1); font-weight:600}
+  .tags{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
+  .kind{font-size:11px; letter-spacing:.5px; border:1px solid var(--border); color:var(--t2);
+    border-radius:999px; padding:4px 11px; background:var(--panel)}
+  .kind.det{color:var(--cyan); border-color:#2b6f7788}
+  .brand{position:absolute; top:34px; right:38px; font-size:12px; color:var(--t3); letter-spacing:.6px}
+
+  .steps{margin-top:20px}
+  .step{display:grid; grid-template-columns:150px 1fr auto; align-items:center; gap:16px;
+    background:var(--panel); border:1px solid var(--border); border-left-width:3px; border-radius:10px; padding:13px 15px}
+  .step.n{border-left-color:#3b4048}
+  .step.info{border-left-color:var(--blue)}
+  .step.bad{border-left-color:var(--red)}
+  .lane{font-size:11px; color:var(--t2); font-weight:700; letter-spacing:.6px; text-transform:uppercase}
+  .lane small{display:block; color:var(--t3); font-weight:500; text-transform:none; letter-spacing:0; font-size:11px; margin-top:3px}
+  .title{font-size:15px; font-weight:600}
+  .detail{font-size:12.8px; color:var(--t2); margin-top:4px; line-height:1.5}
+  .badge{font-size:11.5px; font-weight:800; letter-spacing:.6px; padding:5px 12px; border-radius:999px; border:1px solid; white-space:nowrap}
+  .b-bad{color:var(--red); border-color:#8e2b26; background:#2a1211}
+  .arrow{height:15px; display:flex; align-items:center; justify-content:center; color:var(--t3); font-size:15px}
+
+  .result{margin-top:18px; border:1px solid var(--border); border-left:3px solid var(--red);
+    border-radius:10px; background:var(--panel2); padding:13px 16px; display:flex; gap:12px; align-items:flex-start}
+  .result .h{font-size:13px; font-weight:700; color:var(--red); letter-spacing:.3px; white-space:nowrap}
+  .result .t{font-size:13px; color:var(--t2); line-height:1.5}
+  .result .t b{color:var(--t1); font-weight:600}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand mono">crucible</div>
+    <h1>Scenario B &middot; deterministic <span style="color:var(--red)">false positive</span> &mdash; &ldquo;403 bypass&rdquo;</h1>
+    <div class="sub">The FP-rate story. A scanner flags a <code>/%2e/</code> path-normalization bypass; Crucible replays it and asks whether the protected bytes actually came back. <b>They didn&rsquo;t.</b></div>
+    <div class="tags"><span class="kind det">config-check class</span><span class="kind">built</span><span class="kind">real run: <span class="mono">Bypassing 403</span></span></div>
+
+    <div class="steps">
+      <div class="step n">
+        <div class="lane">Host<small>plan</small></div>
+        <div>
+          <div class="title">Fetch the file directly, then via the bypass</div>
+          <div class="detail">Compare <code>/ftp/package.json.bak</code> against <code>/%2e/ftp/package.json.bak</code>.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step n">
+        <div class="lane">Sandbox<small>run</small></div>
+        <div>
+          <div class="title">Send both requests</div>
+          <div class="detail"><span class="mono">verify.py</span> returns status + body length for each.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step info">
+        <div class="lane">Target<small>respond</small></div>
+        <div>
+          <div class="title">403 direct, 200 on the bypass &mdash; but the wrong body</div>
+          <div class="detail">direct <code>403</code> (len 1934) &middot; bypass <code>200</code> (len <b>9393</b>) &mdash; and 9393 is exactly the Angular SPA shell every unknown route returns.</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="arrow">&#8595;</div>
+
+      <div class="step bad">
+        <div class="lane">Oracle<small>judge effect</small></div>
+        <div>
+          <div class="title">200 &ne; disclosure &mdash; no file bytes returned</div>
+          <div class="detail">The &ldquo;bypass&rdquo; served the app shell, not <code>package.json.bak</code>. The effect (read a protected file) never happened.</div>
+        </div>
+        <div class="badge b-bad">FALSE POSITIVE</div>
+      </div>
+    </div>
+
+    <div class="result">
+      <div class="h">WHY IT MATTERS</div>
+      <div class="t">A status-code-only scanner sees <code>403&rarr;200</code> and cries &ldquo;bypass.&rdquo; The <b>effect-oracle</b> checks the body and drops it with a reason. <b>23 of 26</b> Juice Shop findings land here &mdash; that filtered noise is the measured <b>false-positive rate</b>.</div>
+    </div>
+  </div>
+</body>
+</html>
