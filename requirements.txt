@@ -1,0 +1,7 @@
+# Core (required)
+pydantic>=2.13,<3
+httpx>=0.28,<1
+
+# Enables the adaptive LLM layer (provider-agnostic via ADAPTIVE_MODEL). The
+# pipeline still runs deterministic-only if no matching API key is set.
+pydantic-ai-slim[google,openai,anthropic]>=2.31,<3

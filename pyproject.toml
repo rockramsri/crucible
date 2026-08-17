@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crucible"
+version = "0.1.0"
+description = "Validate scanner findings by re-exploiting them in an ephemeral sandbox."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.13,<3",
+    "httpx>=0.28,<1",
+    "pydantic-ai-slim[google,openai,anthropic]>=2.31,<3",
+]
+
+[project.scripts]
+crucible = "crucible.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+crucible = ["runner/Dockerfile"]
