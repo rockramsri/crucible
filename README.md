@@ -9,6 +9,12 @@ artifact and a measured **false-positive rate**.
 > Detection is what a scanner does. Crucible *proves — or disproves* — each finding.
 > **AI proposes, deterministic logic disposes.**
 
+<p align="center">
+  <img src="docs/images/adaptive-sqli.gif" alt="Animated walkthrough: the deterministic UNION attempt 500s, the oracle marks it UNRESOLVED, the budget gate allows a refine, the LLM proposes a sweep tactic, code expands it into ~60 probes, one returns the injected marker, and the oracle stamps CONFIRMED." width="880">
+</p>
+
+<p align="center"><a href="#explore-it-live"><b>▶ Explore the interactive version</b></a> — pick any vuln class and trace its full run.</p>
+
 ---
 
 ## Architecture
@@ -89,6 +95,22 @@ stamps `confirmed`.
 This is the finding a deterministic-only run leaves `INCONCLUSIVE`. **Zero
 hallucination:** the LLM only ever proposed a tactic; the effect-oracle did the
 confirming.
+
+---
+
+## Explore it live
+
+The stills above are exported from a single, self-contained interactive page —
+[`docs/index.html`](docs/index.html). Pick any vulnerability class (SQLi, auth
+bypass, CORS, …) and trace its full run in a scrollable swimlane, payloads and
+verdict stamps included. It's the same view as the animation, but you drive it.
+
+- **Locally:** just open `docs/index.html` in a browser (no server, no build).
+- **Publish free on GitHub Pages:** repo **Settings → Pages → Build and deployment
+  → Deploy from a branch → Branch: `main`, folder: `/docs`**. It goes live at
+  `https://<your-username>.github.io/crucible/`.
+- **Deep-link a class** with the URL hash: `#sqli`, `#auth_bypass`, `#cors`,
+  `#open_redirect`, `#ssrf`, …
 
 ---
 
@@ -174,15 +196,16 @@ src/crucible/                 Python package
 data/zap/juiceshop/           ZAP reports (input)
 data/output/juiceshop/        validation report + LLM trace (committed sample)
 scripts/                      Juice Shop + ZAP helpers
-docs/diagrams/                diagram sources (.html) + render.sh
-docs/images/                  rendered diagrams used above
+docs/index.html               interactive flow (self-contained; GitHub Pages)
+docs/diagrams/                diagram + animation sources + render.sh
+docs/images/                  rendered diagrams + adaptive-sqli.gif
 ```
 
 ## Extending
 
 - **New scanner** — add an adapter under `src/crucible/ingest/` that returns `Finding`s.
 - **New vuln class** — add a `VulnClass`, write `playbooks/<class>.py` with `build_steps()` + `oracle()`, and register it in `playbooks/__init__.py`.
-- **Regenerate the diagrams** — edit the HTML in `docs/diagrams/` and run `./docs/diagrams/render.sh` (needs Chrome + `pip install pillow`).
+- **Regenerate the diagrams & GIF** — edit the HTML in `docs/diagrams/` and run `./docs/diagrams/render.sh` (needs Chrome + `pip install pillow`).
 
 ## Verdict taxonomy
 

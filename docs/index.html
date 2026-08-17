@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Crucible — adaptive validation flow</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#30363d;
+    --t1:#e6edf3; --t2:#9aa5b1; --t3:#6e7681; --t4:#545d68;
+    --green:#3fb950; --red:#f85149; --purple:#bc8cff; --yellow:#d29922; --blue:#58a6ff; --cyan:#39c5cf;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{background:var(--bg); color:var(--t1);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.5}
+  a{color:var(--blue); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px;
+    background:#0f141b; border:1px solid var(--border); border-radius:5px; padding:1px 5px; color:#c9d4e0}
+  .wrap{max-width:1200px; margin:0 auto; padding:34px 26px 60px}
+
+  .brand{font-size:12px; color:var(--t3); letter-spacing:.6px; margin-bottom:10px}
+  h1{font-size:26px; font-weight:660; letter-spacing:.2px}
+  .lede{font-size:14.5px; color:var(--t2); margin-top:9px; max-width:820px}
+  .lede b{color:var(--t1); font-weight:600}
+
+  .legend{display:flex; gap:16px; margin-top:16px; flex-wrap:wrap; align-items:center}
+  .lg{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--t2)}
+  .dot{width:9px; height:9px; border-radius:999px; display:inline-block}
+
+  h2{font-size:16px; font-weight:640; margin-bottom:4px}
+  .muted{font-size:12.5px; color:var(--t3)}
+  section{margin-top:26px}
+  hr{border:0; border-top:1px solid var(--border); margin:26px 0}
+
+  /* outcomes */
+  .ocards{display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:12px}
+  .ocard{cursor:pointer; border:1px solid var(--border); border-left:3px solid var(--t3);
+    background:var(--panel); border-radius:9px; padding:13px 14px; transition:border-color .12s, background .12s}
+  .ocard:hover{border-color:var(--t2)}
+  .ocard .top{display:flex; align-items:center; justify-content:space-between; gap:8px}
+  .ocard .lbl{font-size:12px; color:var(--t3)}
+  .ocard .line{font-size:13px; color:var(--t2); margin-top:7px}
+  .ocard .hint{font-size:11.5px; color:var(--t4); margin-top:9px}
+  .vpill{font-size:10px; font-weight:700; letter-spacing:.4px; border:1px solid; border-radius:999px; padding:2px 8px; white-space:nowrap}
+
+  /* pipeline */
+  .pipe{display:flex; align-items:center; overflow-x:auto; padding-bottom:6px; margin-top:12px}
+  .stage{border:1px solid var(--border); border-left:2px solid #3b4048; background:var(--panel);
+    border-radius:7px; padding:8px 12px; font-size:13px; font-weight:550; white-space:nowrap}
+  .stage.loop{border-left-color:var(--purple); background:var(--panel2); font-weight:680}
+  .sep{color:var(--t3); padding:0 8px}
+
+  /* chips */
+  .chiprow{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:9px}
+  .chiprow .k{font-size:12px; color:var(--t3); width:92px; flex:none}
+  .chip{cursor:pointer; display:inline-flex; align-items:center; gap:7px; border:1px solid var(--border);
+    background:var(--panel); color:var(--t1); border-radius:999px; padding:6px 12px; font-size:13px}
+  .chip:hover{border-color:var(--t2)}
+  .chip.active{border-color:var(--purple); background:var(--panel2)}
+  .chip.det.active{border-color:var(--cyan)}
+  .chip .cdot{width:8px; height:8px; border-radius:999px; display:inline-block}
+  .chip.planned{color:var(--t3)}
+
+  /* flow header */
+  .flowhead{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
+  .tags{display:flex; gap:8px; align-items:center}
+  .tag{font-size:11px; letter-spacing:.4px; border:1px solid var(--border); color:var(--t2);
+    border-radius:999px; padding:3px 10px; background:var(--panel)}
+  .tag.det{color:var(--cyan); border-color:#2b6f7788}
+  .tag.ada{color:var(--purple); border-color:#5a3f8f88}
+
+  /* ribbon */
+  .ribbon{display:flex; align-items:center; overflow-x:auto; padding-bottom:6px; margin-top:12px}
+  .rchip{border:1px solid var(--border); border-left:2px solid #3b4048; background:var(--panel);
+    border-radius:7px; padding:6px 11px; white-space:nowrap}
+  .rchip .rt{font-size:11px; color:var(--t3)}
+  .rchip .rp{font-size:12.5px; font-weight:560}
+
+  /* swimlane */
+  .swimwrap{overflow-x:auto; padding-bottom:8px; margin-top:14px}
+  .swim{display:grid; gap:8px; align-items:stretch}
+  .swim .hcell{padding:6px 8px; border-bottom:1px solid var(--border)}
+  .swim .hcell .ht{font-size:11px; color:var(--t3)}
+  .swim .hcell .hp{font-size:12px; font-weight:560}
+  .swim .corner,.swim .lanelbl{position:sticky; left:0; background:var(--bg); z-index:2}
+  .swim .lanelbl{display:flex; align-items:center; font-size:12px; font-weight:620; color:var(--t2); padding-right:8px}
+  .cell{min-height:62px; border:1px solid var(--border); border-left:3px solid #3b4048;
+    background:var(--panel); border-radius:8px; padding:8px 10px}
+  .cell.ada{background:var(--panel2)}
+  .cell .clabel{display:flex; align-items:center; justify-content:space-between; gap:6px}
+  .cell .cl{font-size:12.5px; font-weight:620}
+  .cell .cd{font-size:11.5px; color:var(--t3); margin-top:3px; line-height:1.45}
+  .cell.ph{border:1px dashed var(--border); background:transparent; display:flex; align-items:center;
+    justify-content:center; color:var(--t4); min-height:62px}
+
+  /* callouts + detail */
+  .callout{margin-top:14px; border:1px solid var(--border); border-left:3px solid var(--blue);
+    background:var(--panel2); border-radius:9px; padding:13px 15px}
+  .callout.info{border-left-color:var(--blue)} .callout.neutral{border-left-color:var(--t3)}
+  .callout.warn{border-left-color:var(--yellow)}
+  .callout .ct{font-size:13px; font-weight:660; margin-bottom:5px}
+  .callout .cb{font-size:13px; color:var(--t2)}
+  .callout.warn .ct{color:var(--yellow)}
+
+  .detail{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px}
+  .detail h3{font-size:13.5px; font-weight:620; margin-bottom:8px}
+  .detail .eff{font-size:13px; color:var(--t2); margin-bottom:10px}
+  .tlist{display:flex; flex-direction:column; gap:6px}
+  .tlist .ti{display:flex; gap:8px; font-size:12.5px; color:var(--t2)}
+  .tlist .ti .d{color:var(--t4)}
+  pre.brief{border:1px solid var(--border); background:#0f141b; border-radius:8px; padding:12px 13px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; line-height:1.55;
+    color:var(--t2); white-space:pre; overflow-x:auto}
+
+  .foot{margin-top:34px; font-size:12px; color:var(--t4)}
+  @media (max-width:760px){ .ocards{grid-template-columns:1fr} .detail{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const LANES = [
+  { id:"host",    label:"Host \u00b7 generate" },
+  { id:"sandbox", label:"Sandbox \u00b7 execute" },
+  { id:"target",  label:"Target app" },
+  { id:"oracle",  label:"Oracle \u00b7 judge effect" },
+  { id:"budget",  label:"Budget" },
+];
+
+function adaptiveFlow(s){return [
+  {t:1,lane:"host",   phase:"ingest + plan",label:"deterministic plan",detail:s.plan, tone:"neutral"},
+  {t:2,lane:"sandbox",phase:"run #1",       label:"send steps",       detail:s.run1, tone:"neutral"},
+  {t:3,lane:"target", phase:"respond",      label:s.resp1,            detail:s.resp1d,tone:"neutral"},
+  {t:4,lane:"oracle", phase:"judge",        label:"effect check",     detail:s.fail, tone:"danger", verdict:"UNRESOLVED"},
+  {t:5,lane:"budget", phase:"gate",         label:"3 \u2192 2 left",  detail:"steps / time / tokens", tone:"warning"},
+  {t:6,lane:"host",   phase:"adaptive",     label:"LLM crafts next step",detail:s.craft,tone:"adaptive"},
+  {t:7,lane:"sandbox",phase:"run #2",       label:"send refined",     detail:s.run2, tone:"adaptive"},
+  {t:8,lane:"target", phase:"respond",      label:s.resp2,            detail:s.resp2d,tone:"neutral"},
+  {t:9,lane:"oracle", phase:"judge",        label:"effect check",     detail:s.confirm,tone:"success",verdict:"CONFIRMED"},
+];}
+
+function deterministicFlow(s){return [
+  {t:1,lane:"host",   phase:"plan",   label:"single probe",detail:s.plan, tone:"neutral"},
+  {t:2,lane:"sandbox",phase:"run",    label:"send probe",  detail:s.probe,tone:"neutral"},
+  {t:3,lane:"target", phase:"respond",label:s.resp,        detail:s.respd,tone:"neutral"},
+  {t:4,lane:"oracle", phase:"judge",  label:"config check",detail:s.check,tone:s.tone,verdict:s.verdict},
+];}
+
+const CLASSES = [
+  { id:"sqli", name:"SQL injection", kind:"adaptive", built:true,
+    successEffect:"A marker we injected shows up in a response that could only contain it via injection.",
+    tactics:["500 on UNION \u2192 infer column count \u2192 targeted UNION","filter / WAF \u2192 encoding, comments, casing","blind only \u2192 boolean or time differential"],
+    brief:["class: SQLI","success_effect: injected marker appears where it never should","escalate_on_fail:","  - 500 on UNION -> infer column count -> retry","  - filter/WAF   -> encoding / comments / casing","  - blind only   -> boolean or time differential","give_up: budget exhausted -> INCONCLUSIVE (never FP-by-timeout)"].join("\n"),
+    timeline:adaptiveFlow({plan:"q=nomatch; UNION SELECT marker\u00d79; control",run1:"baseline \u00b7 attack \u00b7 control",resp1:"200 / 500 / 200",resp1d:"UNION column-count mismatch \u2192 500",fail:"no marker + 500 \u2192 UNRESOLVED",craft:"reads 500 + brief \u2192 infer 9 cols \u2192 targeted UNION w/ marker",run2:"q=nomatch')) UNION SELECT marker\u00d79-- -",resp2:"200",resp2d:"one row returned = our marker",confirm:"marker present, absent in baseline \u2192 CONFIRMED"}),
+    verdictNote:"Proof = the marker row + baseline diff. The LLM proposed the payload; the deterministic effect-oracle stamped the verdict." },
+
+  { id:"idor", name:"IDOR / BOLA", kind:"adaptive", built:false,
+    successEffect:"Account B pulls account A's seeded sentinel record.",
+    tactics:["enumerate / guess object IDs","sibling endpoints + HTTP verb swap","leak a valid ID first, then replay it as B"],
+    brief:["class: IDOR / BOLA","success_effect: account B retrieves A's seeded sentinel","escalate_on_fail:","  - 403/empty -> sibling endpoints + verb swap","  - opaque id -> leak a valid id, then replay as B","  - list route -> range / enumerate object ids","give_up: budget exhausted -> INCONCLUSIVE"].join("\n"),
+    timeline:adaptiveFlow({plan:"as A: seed sentinel order; as B: request A's object",run1:"GET /api/basket/{A_id} with B's token",resp1:"403 Forbidden",resp1d:"direct object reference blocked",fail:"A's sentinel NOT in B's response \u2192 UNRESOLVED",craft:"reads 403 + brief \u2192 verb swap + sibling route /api/orders?id=A",run2:"GET /api/orders/{A_id} as B",resp2:"200",resp2d:"returns A's order (our sentinel)",confirm:"B received A's sentinel \u2192 CONFIRMED"}),
+    verdictNote:"The sentinel was seeded as A and retrieved by B, so the effect is un-fakeable by the agent's own echo." },
+
+  { id:"ssrf", name:"SSRF", kind:"adaptive", built:false,
+    successEffect:"A callback reaches your controlled out-of-band listener.",
+    tactics:["alternate URL schemes / encodings","redirect chain to the internal target","obscured or encoded host"],
+    brief:["class: SSRF","success_effect: OOB callback hits our listener with a nonce","escalate_on_fail:","  - filtered host -> encodings / alternate schemes","  - allowlist     -> open-redirect chain to internal","give_up: budget exhausted -> INCONCLUSIVE"].join("\n"),
+    timeline:adaptiveFlow({plan:"param url=http://oob-listener/<nonce>",run1:"submit the SSRF-able request",resp1:"200 (no callback)",resp1d:"host filtered; nonce never arrives",fail:"no OOB hit for nonce \u2192 UNRESOLVED",craft:"reads filter + brief \u2192 encode host / chain via open redirect",run2:"url=http://allowed/redirect?to=http://169.254/<nonce>",resp2:"200",resp2d:"listener records the nonce",confirm:"OOB callback with our nonce \u2192 CONFIRMED"}),
+    verdictNote:"The listener is out-of-band; only a real server-side fetch can deliver the nonce." },
+
+  { id:"rce", name:"RCE / cmd injection", kind:"adaptive", built:false,
+    successEffect:"A marker command's output comes back in the response (or out-of-band).",
+    tactics:["command separators + quoting","encoding variants","blind \u2192 time-delay or out-of-band"],
+    brief:["class: RCE / command injection","success_effect: output of a marker command appears","escalate_on_fail:","  - quoting/sep -> ; | && $() backticks, encodings","  - blind       -> time delay or OOB exfil","give_up: budget exhausted -> INCONCLUSIVE"].join("\n"),
+    timeline:adaptiveFlow({plan:"param=; echo <marker>",run1:"submit injected command",resp1:"200 (marker absent)",resp1d:"separator neutralized",fail:"marker output not seen \u2192 UNRESOLVED",craft:"reads response + brief \u2192 try $(...) and time-delay probe",run2:"param=$(sleep 5); param=`echo <marker>`",resp2:"200 + delay",resp2d:"5s delay, then marker echoed",confirm:"marker output returned \u2192 CONFIRMED"}),
+    verdictNote:"The marker is our chosen string; a delay/echo tied to it proves execution, not reflection." },
+
+  { id:"path_traversal", name:"Path traversal / LFI", kind:"adaptive", built:false,
+    successEffect:"A known sentinel file's contents come back.",
+    tactics:["encodings: %2e, double-encode, wrappers","vary traversal depth","alternate path separators"],
+    brief:["class: path traversal / LFI","success_effect: contents of a known sentinel file returned","escalate_on_fail:","  - filtered ../ -> %2e, double-encode, wrappers","  - wrong depth  -> vary ../ count","give_up: budget exhausted -> INCONCLUSIVE"].join("\n"),
+    timeline:adaptiveFlow({plan:"file=../../../../etc/hostname (known sentinel)",run1:"request the file param",resp1:"200 (SPA shell)",resp1d:"../ stripped; no file",fail:"sentinel contents absent \u2192 UNRESOLVED",craft:"reads response + brief \u2192 double-encode + adjust depth",run2:"file=..%252f..%252f..%252fetc%252fhostname",resp2:"200",resp2d:"returns host file contents",confirm:"sentinel file contents returned \u2192 CONFIRMED"}),
+    verdictNote:"Success = bytes of a file that route has no business serving." },
+
+  { id:"auth_bypass", name:"Auth bypass", kind:"adaptive", built:true,
+    successEffect:"A protected sentinel is reached without valid auth.",
+    tactics:["path / case tricks (/%2e/)","HTTP verb tampering","header spoof / alg:none token"],
+    brief:["class: auth bypass","success_effect: protected sentinel reached without valid auth","escalate_on_fail:","  - 401/403 -> verb tampering, path/case tricks","  - jwt      -> alg:none / weak-key forge","give_up: budget exhausted -> INCONCLUSIVE"].join("\n"),
+    timeline:adaptiveFlow({plan:"SQLi login ' OR 1=1-- ; baseline wrong login; control",run1:"baseline \u00b7 attack \u00b7 control",resp1:"401 / 200+token / 401",resp1d:"injection returns a JWT",fail:"(usually confirms on pass #1)",craft:"if not: reads 401 + brief \u2192 alg:none / verb swap",run2:"retry with forged token / tampered verb",resp2:"200",resp2d:"protected resource reached",confirm:"token only under attack, not baseline/control \u2192 CONFIRMED"}),
+    verdictNote:"Auth bypass often confirms deterministically (the login case); the adaptive lane is the fallback for JWT/verb tricks." },
+
+  { id:"cors", name:"CORS", kind:"deterministic", built:true,
+    successEffect:"Attacker Origin reflected in Access-Control-Allow-Origin.",
+    tactics:["one request, one fixed check \u2014 no LLM in the loop"],
+    brief:["class: CORS (config check)","success_effect: arbitrary Origin reflected in ACAO","note: deterministic. reasoning adds nothing here;","      the loop stops at the oracle."].join("\n"),
+    timeline:deterministicFlow({plan:"Origin: https://evil-cors.example",probe:"GET endpoint with attacker Origin",resp:"ACAO = *",respd:"wildcard, not a reflection of our Origin",check:"origin not reflected \u2192 FALSE POSITIVE",tone:"danger",verdict:"FALSE POSITIVE"}),
+    verdictNote:"Config-check class: no adaptive lane, no budget. Saying so out loud is itself a maturity signal." },
+
+  { id:"open_redirect", name:"Open redirect", kind:"deterministic", built:true,
+    successEffect:"A 3xx Location points off-site to an attacker host.",
+    tactics:["replay marker + scanner payload, follow-redirects off"],
+    brief:["class: open redirect (config check)","success_effect: 3xx Location off-site to our host","note: deterministic. the loop stops at the oracle."].join("\n"),
+    timeline:deterministicFlow({plan:"to=https://oob-validator.example + scanner payload",probe:"GET /redirect?to=... (no follow)",resp:"302 Location off-site",respd:"Location host != target host",check:"off-site 3xx \u2192 CONFIRMED",tone:"success",verdict:"CONFIRMED"}),
+    verdictNote:"Deterministic and confirmed on our real run via the scanner's allow-list-bypassing payload." },
+
+  { id:"info_disclosure", name:"Info disclosure", kind:"deterministic", built:false,
+    successEffect:"A response reveals a sensitive data pattern.",
+    tactics:["pattern match on the response \u2014 no LLM in the loop"],
+    brief:["class: info disclosure (config check)","success_effect: sensitive pattern present in response","note: deterministic. the loop stops at the oracle."].join("\n"),
+    timeline:deterministicFlow({plan:"fetch the flagged path",probe:"GET the resource",resp:"200",respd:"body = Angular SPA shell",check:"no sensitive pattern (SPA) \u2192 FALSE POSITIVE",tone:"danger",verdict:"FALSE POSITIVE"}),
+    verdictNote:"Same SPA-shell false positive the file-disclosure oracle already catches." },
+];
+
+const OUTCOMES = [
+  { id:"open_redirect",  label:"Deterministic confirm",        verdict:"CONFIRMED",      tone:"success",  line:"Open redirect: one replay, a 3xx Location off-site. No LLM in the loop." },
+  { id:"info_disclosure",label:"Deterministic false positive", verdict:"FALSE POSITIVE", tone:"danger",   line:"Flagged path returns the Angular SPA shell, not a secret \u2014 scanner noise, filtered with a reason." },
+  { id:"sqli",           label:"Adaptive confirm",             verdict:"CONFIRMED",      tone:"adaptive", line:"UNION 500 \u2192 LLM proposes a sweep tactic \u2192 code expands it \u2192 the oracle confirms the marker." },
+];
+
+const PIPELINE = ["ZAP JSON","Ingest","Normalize","Findings","Planner","Validator loop","Verdict","Report"];
+
+const TONES = { adaptive:"var(--purple)", success:"var(--green)", danger:"var(--red)", warning:"var(--yellow)", neutral:"var(--t3)" };
+const toneColor = t => TONES[t] || TONES.neutral;
+
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+let selected = (location.hash || "#sqli").slice(1);
+if(!CLASSES.find(c => c.id === selected)) selected = "sqli";
+
+function legend(){
+  const items=[["adaptive","Adaptive (LLM crafts steps)"],["success","Confirmed (effect proven)"],["danger","Fail / unresolved"],["warning","Budget gate"],["neutral","Deterministic step"]];
+  return `<div class="legend">${items.map(([tone,l])=>`<span class="lg"><span class="dot" style="background:${toneColor(tone)}"></span>${esc(l)}</span>`).join("")}</div>`;
+}
+
+function outcomesView(){
+  return `<div class="ocards">${OUTCOMES.map(o=>{
+    const color=toneColor(o.tone), active=o.id===selected;
+    return `<div class="ocard" data-cls="${o.id}" style="border-left-color:${color};${active?`border-color:${color};background:var(--panel2)`:""}">
+      <div class="top"><span class="lbl">${esc(o.label)}</span><span class="vpill" style="color:${color};border-color:${color}">${esc(o.verdict)}</span></div>
+      <div class="line">${esc(o.line)}</div>
+      <div class="hint">${active?"traced below \u2193":"trace it \u2193"}</div>
+    </div>`;
+  }).join("")}</div>`;
+}
+
+function pipeline(){
+  return `<div class="pipe">${PIPELINE.map((s,i)=>{
+    const loop=s==="Validator loop";
+    return `<div class="stage${loop?" loop":""}">${esc(s)}</div>`+(i<PIPELINE.length-1?`<span class="sep">\u2192</span>`:"");
+  }).join("")}</div>`;
+}
+
+function chip(c){
+  const color=c.kind==="adaptive"?"var(--purple)":"var(--t3)";
+  const active=c.id===selected;
+  return `<span class="chip${c.kind==="deterministic"?" det":""}${active?" active":""}${c.built?"":" planned"}" data-cls="${c.id}" title="${c.built?"built":"planned"}">
+    <span class="cdot" style="background:${color}"></span>${esc(c.built?c.name:c.name+" \u00b7 planned")}</span>`;
+}
+
+function ribbon(cls){
+  return `<div class="ribbon">${cls.timeline.map((e,i)=>{
+    const color=toneColor(e.tone);
+    return `<div class="rchip" style="border-left-color:${color}"><div class="rt">t${e.t}</div><div class="rp">${esc(e.phase)}</div></div>`+(i<cls.timeline.length-1?`<span class="sep">\u2192</span>`:"");
+  }).join("")}</div>`;
+}
+
+function swimlane(cls){
+  const maxT=cls.timeline.reduce((m,e)=>Math.max(m,e.t),0);
+  const cols=[]; for(let t=1;t<=maxT;t++) cols.push(t);
+  const at=(lane,t)=>cls.timeline.find(e=>e.lane===lane&&e.t===t);
+  const gridCols=`168px repeat(${maxT}, minmax(150px,1fr))`;
+  const minW=168+maxT*150+maxT*8;
+  let cells="";
+  // header row
+  cells+=`<div class="hcell corner"><div class="ht">actor \\ time \u2192</div></div>`;
+  cols.forEach(t=>{ const e=cls.timeline.find(x=>x.t===t); cells+=`<div class="hcell"><div class="ht">t${t}</div><div class="hp">${e?esc(e.phase):""}</div></div>`; });
+  // lane rows
+  LANES.forEach(lane=>{
+    cells+=`<div class="lanelbl">${esc(lane.label)}</div>`;
+    cols.forEach(t=>{
+      const e=at(lane.id,t);
+      if(!e){ cells+=`<div class="cell ph">\u00b7</div>`; return; }
+      const color=toneColor(e.tone);
+      const v=e.verdict?`<span class="vpill" style="color:${color};border-color:${color}">${esc(e.verdict)}</span>`:"";
+      cells+=`<div class="cell${e.tone==="adaptive"?" ada":""}" style="border-left-color:${color}">
+        <div class="clabel"><span class="cl">${esc(e.label)}</span>${v}</div>
+        ${e.detail?`<div class="cd">${esc(e.detail)}</div>`:""}</div>`;
+    });
+  });
+  return `<div class="swimwrap"><div class="swim" style="grid-template-columns:${gridCols};min-width:${minW}px">${cells}</div></div>`;
+}
+
+function detailView(cls){
+  const tactics=cls.tactics.map(t=>`<div class="ti"><span class="d">\u2013</span><span>${esc(t)}</span></div>`).join("");
+  return `<div class="detail">
+    <div>
+      <h3>Success = effect, not steps</h3>
+      <div class="eff">${esc(cls.successEffect)}</div>
+      <div class="muted" style="margin-bottom:6px">${cls.kind==="adaptive"?"Tactics the LLM tries on failure:":"How it is checked:"}</div>
+      <div class="tlist">${tactics}</div>
+    </div>
+    <div>
+      <h3>Domain brief</h3>
+      <pre class="brief">${esc(cls.brief)}</pre>
+    </div>
+  </div>`;
+}
+
+function flowSection(cls){
+  const kindTag=cls.kind==="adaptive"?`<span class="tag ada">adaptive class</span>`:`<span class="tag det">config-check class</span>`;
+  const callout = cls.kind==="adaptive"
+    ? `<div class="callout info"><div class="ct">Where the verdict is stamped</div><div class="cb">At t9 the deterministic oracle checks the bug's EFFECT (${esc(cls.successEffect.toLowerCase())}) \u2014 so no matter what path the agent improvised at t6, only a real, observed effect turns it green. ${esc(cls.verdictNote)}</div></div>`
+    : `<div class="callout neutral"><div class="ct">No adaptive lane here</div><div class="cb">${esc(cls.verdictNote)}</div></div>`;
+  return `<div class="flowhead">
+      <h2>3 \u00b7 ${esc(cls.name)}: one complete flow</h2>
+      <div class="tags">${kindTag}<span class="tag">${cls.built?"built":"planned"}</span></div>
+    </div>
+    <div class="muted">Timeline (left \u2192 right). Each column is one moment; the highlighted lane is who acts. Scroll sideways to follow the run.</div>
+    ${ribbon(cls)}
+    ${swimlane(cls)}
+    ${callout}`;
+}
+
+function render(){
+  const cls=CLASSES.find(c=>c.id===selected)||CLASSES[0];
+  const adaptive=CLASSES.filter(c=>c.kind==="adaptive");
+  const deterministic=CLASSES.filter(c=>c.kind==="deterministic");
+  document.getElementById("app").innerHTML = `
+    <div class="brand mono">crucible</div>
+    <h1>Crucible \u2014 adaptive validation flow</h1>
+    <div class="lede"><b>AI proposes, deterministic logic disposes:</b> the oracle owns the verdict and the LLM never confirms. Start with the three outcomes, then pick any class to trace one complete run \u2014 including the failure that triggers the adaptive layer and the budget gate.</div>
+    ${legend()}
+
+    <section>
+      <h2>The three outcomes</h2>
+      <div class="muted">Every finding ends in one of these. Click one to trace its full run below.</div>
+      ${outcomesView()}
+    </section>
+
+    <hr/>
+
+    <section>
+      <h2>1 \u00b7 Pipeline (scan report in, scored report out)</h2>
+      ${pipeline()}
+      <div class="muted" style="margin-top:6px">Steps run in an ephemeral, network-locked sandbox \u2014 no LLM, no internet egress inside the box.</div>
+    </section>
+
+    <section>
+      <h2>2 \u00b7 Pick a class</h2>
+      <div class="chiprow"><span class="k">adaptive</span>${adaptive.map(chip).join("")}</div>
+      <div class="chiprow"><span class="k">deterministic</span>${deterministic.map(chip).join("")}</div>
+    </section>
+
+    <section>${flowSection(cls)}</section>
+
+    <hr/>
+
+    <section>
+      <h2>4 \u00b7 What the class carries</h2>
+      ${detailView(cls)}
+    </section>
+
+    <div class="callout warn">
+      <div class="ct">The guardrail (a real vendor got burned without it)</div>
+      <div class="cb">Escape shipped an XSS sub-agent that logged into the browser console, executed the script itself, and reported success \u2014 a hallucinated bug. The fix is this architecture's rule: the oracle observes the effect INDEPENDENTLY of the agent's own actions. Generation is free; judgment is deterministic and un-fakeable.</div>
+    </div>
+
+    <div class="foot">Static, self-contained mirror of the Crucible flow \u00b7 deep-link a class with <code>#sqli</code>, <code>#cors</code>, <code>#auth_bypass</code>, \u2026</div>
+  `;
+}
+
+function select(id){ if(!CLASSES.find(c=>c.id===id))return; selected=id; if(location.hash.slice(1)!==id) location.hash=id; render(); }
+document.getElementById("app").addEventListener("click", e=>{ const el=e.target.closest("[data-cls]"); if(el) select(el.getAttribute("data-cls")); });
+window.addEventListener("hashchange", ()=>{ const id=location.hash.slice(1); if(CLASSES.find(c=>c.id===id)){ selected=id; render(); } });
+render();
+</script>
+</body>
+</html>
