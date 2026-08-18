@@ -1,6 +1,9 @@
 # Secrets / local env
 .env
 
+# JS / UI
+node_modules/
+
 # Python
 .venv/
 __pycache__/

@@ -1,4 +1,4 @@
-"""Crucible HTTP API — the live backend the UI (Ops Layer) talks to.
+"""Crucible HTTP API — the live backend the console (ui/) talks to.
 
 Two ways to start a run (both stream the SAME Server-Sent-Events sequence the
 front-end already understands, so mock and live drive identical UI code):
@@ -25,8 +25,11 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
+import sys
 import uuid
 from collections import Counter
+from contextlib import asynccontextmanager
 from typing import Any, Awaitable, Callable
 
 log = logging.getLogger("api")
@@ -40,6 +43,41 @@ except ModuleNotFoundError as exc:  # pragma: no cover
         "The API needs FastAPI + uvicorn. Install them with:\n"
         '    pip install -e ".[api]"'
     ) from exc
+
+# Filled at process startup after load_dotenv(). Never includes secret values.
+_ADAPTIVE_STATUS: dict[str, Any] = {}
+
+
+def _bootstrap_env() -> None:
+    """Load repo `.env` once, before any run, and log whether adaptive can fire."""
+    from .agent import RefineAgent
+    from .cli import load_dotenv
+
+    load_dotenv()
+    agent = RefineAgent()
+    _ADAPTIVE_STATUS.update({
+        "adaptive": agent.enabled,
+        "model": agent.model,
+        "openai_key": "set" if os.getenv("OPENAI_API_KEY") else "empty",
+        "gemini_key": "set" if os.getenv("GEMINI_API_KEY") else "empty",
+        "anthropic_key": "set" if os.getenv("ANTHROPIC_API_KEY") else "empty",
+        "python": sys.executable,
+    })
+    log.info(
+        "startup env · ADAPTIVE_MODEL=%s · adaptive=%s · OPENAI_API_KEY=%s · "
+        "GEMINI_API_KEY=%s · python=%s",
+        _ADAPTIVE_STATUS["model"],
+        _ADAPTIVE_STATUS["adaptive"],
+        _ADAPTIVE_STATUS["openai_key"],
+        _ADAPTIVE_STATUS["gemini_key"],
+        _ADAPTIVE_STATUS["python"],
+    )
+
+
+@asynccontextmanager
+async def _lifespan(_app: FastAPI):
+    _bootstrap_env()
+    yield
 
 
 # --------------------------------------------------------------------------- #
@@ -230,10 +268,10 @@ async def _run_live(body: dict[str, Any], emit: Emit, wait, run_id: str) -> None
 # App + run registry
 # --------------------------------------------------------------------------- #
 
-app = FastAPI(title="Crucible API", version="0.1.0")
+app = FastAPI(title="Crucible API", version="0.1.0", lifespan=_lifespan)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],           # demo: any origin (Lovable, localhost, Pages)
+    allow_origins=["*"],           # demo: any origin (localhost, Pages)
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -249,8 +287,8 @@ def root() -> dict[str, Any]:
 
 
 @app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+def health() -> dict[str, Any]:
+    return {"status": "ok", **_ADAPTIVE_STATUS}
 
 
 @app.post("/runs")

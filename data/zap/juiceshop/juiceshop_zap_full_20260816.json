@@ -1,24 +1,16 @@
 {
 	"@programName": "ZAP",
 	"@version": "2.17.0",
-	"@generated": "Mon, 17 Aug 2026 21:55:30",
-	"created": "2026-08-17T21:55:30.452810793Z",
+	"@generated": "Sun, 16 Aug 2026 16:21:33",
+	"created": "2026-08-16T16:21:33.151874586Z",
 	"insights":[
-		{
-			"level": "Low",
-			"reason": "Warning",
-			"site": "",
-			"key": "insight.log.error",
-			"description": "ZAP errors logged - see the zap.log file for details",
-			"statistic": "1"
-		},
 		{
 			"level": "Low",
 			"reason": "Warning",
 			"site": "",
 			"key": "insight.log.warn",
 			"description": "ZAP warnings logged - see the zap.log file for details",
-			"statistic": "44"
+			"statistic": "32"
 		},
 		{
 			"level": "Low",
@@ -50,7 +42,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.code.3xx",
 			"description": "Percentage of responses with status code 3xx",
-			"statistic": "2"
+			"statistic": "3"
 		},
 		{
 			"level": "Info",
@@ -58,7 +50,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.code.5xx",
 			"description": "Percentage of responses with status code 5xx",
-			"statistic": "3"
+			"statistic": "4"
 		},
 		{
 			"level": "Info",
@@ -66,7 +58,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.endpoint.ctype.application/javascript",
 			"description": "Percentage of endpoints with content type application/javascript",
-			"statistic": "4"
+			"statistic": "5"
 		},
 		{
 			"level": "Info",
@@ -74,7 +66,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.endpoint.ctype.application/json",
 			"description": "Percentage of endpoints with content type application/json",
-			"statistic": "9"
+			"statistic": "8"
 		},
 		{
 			"level": "Info",
@@ -90,7 +82,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.endpoint.ctype.image/jpeg",
 			"description": "Percentage of endpoints with content type image/jpeg",
-			"statistic": "12"
+			"statistic": "13"
 		},
 		{
 			"level": "Info",
@@ -98,15 +90,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.endpoint.ctype.image/png",
 			"description": "Percentage of endpoints with content type image/png",
-			"statistic": "5"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "http://juiceshop:3000",
-			"key": "insight.endpoint.ctype.image/svg+xml",
-			"description": "Percentage of endpoints with content type image/svg+xml",
-			"statistic": "18"
+			"statistic": "6"
 		},
 		{
 			"level": "Info",
@@ -130,7 +114,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.endpoint.ctype.text/html",
 			"description": "Percentage of endpoints with content type text/html",
-			"statistic": "41"
+			"statistic": "57"
 		},
 		{
 			"level": "Info",
@@ -154,7 +138,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.endpoint.method.GET",
 			"description": "Percentage of endpoints with method GET",
-			"statistic": "96"
+			"statistic": "97"
 		},
 		{
 			"level": "Info",
@@ -162,7 +146,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.endpoint.method.POST",
 			"description": "Percentage of endpoints with method POST",
-			"statistic": "3"
+			"statistic": "2"
 		},
 		{
 			"level": "Info",
@@ -170,7 +154,7 @@
 			"site": "http://juiceshop:3000",
 			"key": "insight.endpoint.total",
 			"description": "Count of total endpoints",
-			"statistic": "229"
+			"statistic": "173"
 		},
 		{
 			"level": "Info",
@@ -263,14 +247,6 @@
 		{
 			"level": "Info",
 			"reason": "Informational",
-			"site": "https://avatars.githubusercontent.com",
-			"key": "insight.response.slow",
-			"description": "Percentage of slow responses",
-			"statistic": "2"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
 			"site": "https://camo.githubusercontent.com",
 			"key": "insight.code.2xx",
 			"description": "Percentage of responses with status code 2xx",
@@ -322,55 +298,7 @@
 			"site": "https://camo.githubusercontent.com",
 			"key": "insight.response.slow",
 			"description": "Percentage of slow responses",
-			"statistic": "5"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://cdn.fosstodon.org",
-			"key": "insight.code.2xx",
-			"description": "Percentage of responses with status code 2xx",
-			"statistic": "100"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://cdn.fosstodon.org",
-			"key": "insight.endpoint.ctype.image/jpeg",
-			"description": "Percentage of endpoints with content type image/jpeg",
-			"statistic": "35"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://cdn.fosstodon.org",
-			"key": "insight.endpoint.ctype.image/png",
-			"description": "Percentage of endpoints with content type image/png",
-			"statistic": "64"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://cdn.fosstodon.org",
-			"key": "insight.endpoint.method.GET",
-			"description": "Percentage of endpoints with method GET",
-			"statistic": "100"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://cdn.fosstodon.org",
-			"key": "insight.endpoint.total",
-			"description": "Count of total endpoints",
-			"statistic": "17"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://cdn.fosstodon.org",
-			"key": "insight.response.slow",
-			"description": "Percentage of slow responses",
-			"statistic": "47"
+			"statistic": "6"
 		},
 		{
 			"level": "Info",
@@ -394,87 +322,15 @@
 			"site": "https://collector.github.com",
 			"key": "insight.endpoint.total",
 			"description": "Count of total endpoints",
-			"statistic": "4"
+			"statistic": "2"
 		},
 		{
 			"level": "Info",
 			"reason": "Informational",
-			"site": "https://fosstodon.org",
-			"key": "insight.code.2xx",
-			"description": "Percentage of responses with status code 2xx",
-			"statistic": "99"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://fosstodon.org",
-			"key": "insight.endpoint.ctype.application/json",
-			"description": "Percentage of endpoints with content type application/json",
-			"statistic": "6"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://fosstodon.org",
-			"key": "insight.endpoint.ctype.font/woff2",
-			"description": "Percentage of endpoints with content type font/woff2",
-			"statistic": "1"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://fosstodon.org",
-			"key": "insight.endpoint.ctype.image/svg+xml",
-			"description": "Percentage of endpoints with content type image/svg+xml",
-			"statistic": "1"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://fosstodon.org",
-			"key": "insight.endpoint.ctype.text/css",
-			"description": "Percentage of endpoints with content type text/css",
-			"statistic": "14"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://fosstodon.org",
-			"key": "insight.endpoint.ctype.text/html",
-			"description": "Percentage of endpoints with content type text/html",
-			"statistic": "1"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://fosstodon.org",
-			"key": "insight.endpoint.ctype.text/javascript",
-			"description": "Percentage of endpoints with content type text/javascript",
-			"statistic": "74"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://fosstodon.org",
-			"key": "insight.endpoint.method.GET",
-			"description": "Percentage of endpoints with method GET",
-			"statistic": "100"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://fosstodon.org",
-			"key": "insight.endpoint.total",
-			"description": "Count of total endpoints",
-			"statistic": "162"
-		},
-		{
-			"level": "Info",
-			"reason": "Informational",
-			"site": "https://fosstodon.org",
+			"site": "https://collector.github.com",
 			"key": "insight.response.slow",
 			"description": "Percentage of slow responses",
-			"statistic": "19"
+			"statistic": "50"
 		},
 		{
 			"level": "Info",
@@ -482,7 +338,7 @@
 			"site": "https://github.com",
 			"key": "insight.code.2xx",
 			"description": "Percentage of responses with status code 2xx",
-			"statistic": "83"
+			"statistic": "86"
 		},
 		{
 			"level": "Info",
@@ -490,7 +346,7 @@
 			"site": "https://github.com",
 			"key": "insight.code.3xx",
 			"description": "Percentage of responses with status code 3xx",
-			"statistic": "9"
+			"statistic": "6"
 		},
 		{
 			"level": "Info",
@@ -554,7 +410,7 @@
 			"site": "https://github.com",
 			"key": "insight.response.slow",
 			"description": "Percentage of slow responses",
-			"statistic": "74"
+			"statistic": "73"
 		},
 		{
 			"level": "Info",
@@ -570,7 +426,7 @@
 			"site": "https://github.githubassets.com",
 			"key": "insight.endpoint.ctype.application/javascript",
 			"description": "Percentage of endpoints with content type application/javascript",
-			"statistic": "80"
+			"statistic": "81"
 		},
 		{
 			"level": "Info",
@@ -578,7 +434,7 @@
 			"site": "https://github.githubassets.com",
 			"key": "insight.endpoint.ctype.text/css",
 			"description": "Percentage of endpoints with content type text/css",
-			"statistic": "18"
+			"statistic": "17"
 		},
 		{
 			"level": "Info",
@@ -594,7 +450,7 @@
 			"site": "https://github.githubassets.com",
 			"key": "insight.endpoint.total",
 			"description": "Count of total endpoints",
-			"statistic": "134"
+			"statistic": "133"
 		},
 		{
 			"level": "Info",
@@ -658,147 +514,13 @@
 			"site": "https://raw.githubusercontent.com",
 			"key": "insight.response.slow",
 			"description": "Percentage of slow responses",
-			"statistic": "30"
+			"statistic": "40"
 		}
 	],
 	"site":[ 
 		{
-			"@name": "https://cdn.fosstodon.org",
-			"@host": "cdn.fosstodon.org",
-			"@port": "443",
-			"@ssl": "true",
-			"alerts": [ 
-			]
-		},
-		{
-			"@name": "https://fosstodon.org",
-			"@host": "fosstodon.org",
-			"@port": "443",
-			"@ssl": "true",
-			"alerts": [ 
-				{
-					"pluginid": "10055",
-					"alertRef": "10055-4",
-					"alert": "CSP: Wildcard Directive",
-					"name": "CSP: Wildcard Directive",
-					"riskcode": "2",
-					"confidence": "3",
-					"riskdesc": "Medium (High)",
-					"desc": "<p>Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks. Including (but not limited to) Cross Site Scripting (XSS), and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.</p>",
-					"instances":[ 
-						{
-							"id": "350",
-							"uri": "https://fosstodon.org/@owasp_juiceshop",
-							"nodeName": "https:\/\/fosstodon.org\/@owasp_juiceshop",
-							"method": "GET",
-							"param": "content-security-policy",
-							"attack": "",
-							"evidence": "base-uri 'none'; default-src 'none'; frame-ancestors 'none'; font-src 'self' https://fosstodon.org; img-src 'self' data: blob: https://fosstodon.org https://cdn.fosstodon.org; media-src 'self' data: https://fosstodon.org https://cdn.fosstodon.org; manifest-src 'self' https://fosstodon.org; form-action 'none'; child-src 'self' blob: https://fosstodon.org; worker-src 'self' blob: https://fosstodon.org; connect-src 'self' data: blob: https://fosstodon.org https://cdn.fosstodon.org wss://fosstodon.org; frame-src 'self' https:; style-src 'self' https://fosstodon.org 'nonce-KzCeCjimD4C/GIm4kji6fw=='; script-src 'self' https://fosstodon.org 'wasm-unsafe-eval' 'sha256-Z5KW83D+6/pygIQS3h9XDpF52xW3l3BHc7JL9tj3uMs='",
-							"otherinfo": "The following directives either allow wildcard sources (or ancestors), are not defined, or are overly broadly defined:\nframe-src"
-						}
-					],
-					"count": "1",
-					"systemic": false,
-					"solution": "<p>Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.</p>",
-					"otherinfo": "<p>The following directives either allow wildcard sources (or ancestors), are not defined, or are overly broadly defined:</p><p>frame-src</p>",
-					"reference": "<p>https://www.w3.org/TR/CSP/</p><p>https://caniuse.com/#search=content+security+policy</p><p>https://content-security-policy.com/</p><p>https://github.com/HtmlUnit/htmlunit-csp</p><p>https://web.dev/articles/csp#resource-options</p>",
-					"cweid": "693",
-					"wascid": "15",
-					"sourceid": "813"
-				},
-				{
-					"pluginid": "120000",
-					"alertRef": "120000-2",
-					"alert": "Information Disclosure - Information in Browser sessionStorage",
-					"name": "Information Disclosure - Information in Browser sessionStorage",
-					"riskcode": "0",
-					"confidence": "3",
-					"riskdesc": "Informational (High)",
-					"desc": "<p>Information was stored in browser sessionStorage.</p><p>This is not unusual or necessarily unsafe - this informational alert has been raised to help you get a better understanding of what this app is doing. For more details see the Client tabs - this information was set directly in the browser and will therefore not necessarily appear in this form in any HTTP(S) messages.</p>",
-					"instances":[ 
-						{
-							"id": "351",
-							"uri": "https://fosstodon.org/@owasp_juiceshop",
-							"nodeName": "https:\/\/fosstodon.org\/@owasp_juiceshop",
-							"method": "GET",
-							"param": "@@scroll|undefined",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": "The following data (key=value) was set: @@scroll|undefined=[0,0]\nNote that this alert will only be raised once for each URL + key."
-						},
-						{
-							"id": "352",
-							"uri": "https://fosstodon.org/@owasp_juiceshop",
-							"nodeName": "https:\/\/fosstodon.org\/@owasp_juiceshop",
-							"method": "GET",
-							"param": "@@scroll|undefined|account_timeline",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": "The following data (key=value) was set: @@scroll|undefined|account_timeline=[0,0]\nNote that this alert will only be raised once for each URL + key."
-						}
-					],
-					"count": "2",
-					"systemic": false,
-					"solution": "<p>This is an informational alert and no action is necessary. </p>",
-					"otherinfo": "<p>The following data (key=value) was set: @@scroll|undefined=[0,0]</p><p>Note that this alert will only be raised once for each URL + key.</p>",
-					"reference": "",
-					"cweid": "359",
-					"wascid": "13",
-					"sourceid": "813"
-				},
-				{
-					"pluginid": "10015",
-					"alertRef": "10015",
-					"alert": "Re-examine Cache-control Directives",
-					"name": "Re-examine Cache-control Directives",
-					"riskcode": "0",
-					"confidence": "1",
-					"riskdesc": "Informational (Low)",
-					"desc": "<p>The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.</p>",
-					"instances":[ 
-						{
-							"id": "349",
-							"uri": "https://fosstodon.org/@owasp_juiceshop",
-							"nodeName": "https:\/\/fosstodon.org\/@owasp_juiceshop",
-							"method": "GET",
-							"param": "cache-control",
-							"attack": "",
-							"evidence": "max-age=15, public, stale-while-revalidate=30, stale-if-error=3600",
-							"otherinfo": ""
-						},
-						{
-							"id": "354",
-							"uri": "https://fosstodon.org/api/v2/instance",
-							"nodeName": "https:\/\/fosstodon.org\/api\/v2\/instance",
-							"method": "GET",
-							"param": "cache-control",
-							"attack": "",
-							"evidence": "max-age=300, public, stale-while-revalidate=30, stale-if-error=86400",
-							"otherinfo": ""
-						}
-					],
-					"count": "2",
-					"systemic": true,
-					"solution": "<p>For secure content, ensure the cache-control HTTP header is set with \"no-cache, no-store, must-revalidate\". If an asset should be cached consider setting the directives \"public, max-age, immutable\".</p>",
-					"otherinfo": "",
-					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#web-content-caching</p><p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control</p><p>https://grayduck.mn/2021/09/13/cache-control-recommendations/</p>",
-					"cweid": "525",
-					"wascid": "13",
-					"sourceid": "813"
-				}
-			]
-		},
-		{
 			"@name": "https://api.github.com",
 			"@host": "api.github.com",
-			"@port": "443",
-			"@ssl": "true",
-			"alerts": [ 
-			]
-		},
-		{
-			"@name": "https://collector.github.com",
-			"@host": "collector.github.com",
 			"@port": "443",
 			"@ssl": "true",
 			"alerts": [ 
@@ -813,8 +535,8 @@
 			]
 		},
 		{
-			"@name": "https://raw.githubusercontent.com",
-			"@host": "raw.githubusercontent.com",
+			"@name": "https://collector.github.com",
+			"@host": "collector.github.com",
 			"@port": "443",
 			"@ssl": "true",
 			"alerts": [ 
@@ -829,181 +551,11 @@
 			]
 		},
 		{
-			"@name": "https://github.githubassets.com",
-			"@host": "github.githubassets.com",
+			"@name": "https://raw.githubusercontent.com",
+			"@host": "raw.githubusercontent.com",
 			"@port": "443",
 			"@ssl": "true",
 			"alerts": [ 
-				{
-					"pluginid": "10036",
-					"alertRef": "10036-2",
-					"alert": "Server Leaks Version Information via \"Server\" HTTP Response Header Field",
-					"name": "Server Leaks Version Information via \"Server\" HTTP Response Header Field",
-					"riskcode": "1",
-					"confidence": "3",
-					"riskdesc": "Low (High)",
-					"desc": "<p>The web/application server is leaking version information via the \"Server\" HTTP response header. Access to such information may facilitate attackers identifying other vulnerabilities your web/application server is subject to.</p>",
-					"instances":[ 
-						{
-							"id": "302",
-							"uri": "https://github.githubassets.com/assets/dark-93f3c6b445d800ff.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/dark-93f3c6b445d800ff.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "Windows-Azure-Web/1.0 Microsoft-HTTPAPI/2.0",
-							"otherinfo": ""
-						},
-						{
-							"id": "304",
-							"uri": "https://github.githubassets.com/assets/dark_high_contrast-49511e11e3ed53a8.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/dark_high_contrast-49511e11e3ed53a8.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "Windows-Azure-Web/1.0 Microsoft-HTTPAPI/2.0",
-							"otherinfo": ""
-						},
-						{
-							"id": "309",
-							"uri": "https://github.githubassets.com/assets/light-707b19cf061aa459.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/light-707b19cf061aa459.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "Windows-Azure-Web/1.0 Microsoft-HTTPAPI/2.0",
-							"otherinfo": ""
-						},
-						{
-							"id": "307",
-							"uri": "https://github.githubassets.com/assets/light_high_contrast-fc4b867e16562d12.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/light_high_contrast-fc4b867e16562d12.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "Windows-Azure-Web/1.0 Microsoft-HTTPAPI/2.0",
-							"otherinfo": ""
-						},
-						{
-							"id": "300",
-							"uri": "https://github.githubassets.com/assets/primer-primitives-9f1db623a2d85734.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/primer-primitives-9f1db623a2d85734.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "Windows-Azure-Web/1.0 Microsoft-HTTPAPI/2.0",
-							"otherinfo": ""
-						}
-					],
-					"count": "5",
-					"systemic": true,
-					"solution": "<p>Ensure that your web server, application server, load balancer, etc. is configured to suppress the \"Server\" header or provide generic details.</p>",
-					"otherinfo": "",
-					"reference": "<p>https://httpd.apache.org/docs/current/mod/core.html#servertokens</p><p>https://learn.microsoft.com/en-us/previous-versions/msp-n-p/ff648552(v=pandp.10)</p><p>https://www.troyhunt.com/shhh-dont-let-your-response-headers/</p>",
-					"cweid": "497",
-					"wascid": "13",
-					"sourceid": "409"
-				},
-				{
-					"pluginid": "10027",
-					"alertRef": "10027",
-					"alert": "Information Disclosure - Suspicious Comments",
-					"name": "Information Disclosure - Suspicious Comments",
-					"riskcode": "0",
-					"confidence": "2",
-					"riskdesc": "Informational (Medium)",
-					"desc": "<p>The response appears to contain suspicious comments which may help an attacker.</p>",
-					"instances":[ 
-						{
-							"id": "331",
-							"uri": "https://github.githubassets.com/assets/chunk-lazy-element-select-panel-41aa0dbd0a85c593.js",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/chunk-lazy-element-select-panel-41aa0dbd0a85c593.js",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "=chunk-lazy-element-select-panel-41aa0dbd0a85c",
-							"otherinfo": "The following pattern was used: \\bSELECT\\b and was detected in likely comment: \"//# sourceMappingURL=chunk-lazy-element-select-panel-41aa0dbd0a85c593-e71ee311f1b5df73.js.map\", see evidence field for the suspicious comment/snippet."
-						}
-					],
-					"count": "1",
-					"systemic": false,
-					"solution": "<p>Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.</p>",
-					"otherinfo": "<p>The following pattern was used: \\bSELECT\\b and was detected in likely comment: \"//# sourceMappingURL=chunk-lazy-element-select-panel-41aa0dbd0a85c593-e71ee311f1b5df73.js.map\", see evidence field for the suspicious comment/snippet.</p>",
-					"reference": "",
-					"cweid": "615",
-					"wascid": "13",
-					"sourceid": "560"
-				},
-				{
-					"pluginid": "10050",
-					"alertRef": "10050-1",
-					"alert": "Retrieved from Cache",
-					"name": "Retrieved from Cache",
-					"riskcode": "0",
-					"confidence": "2",
-					"riskdesc": "Informational (Medium)",
-					"desc": "<p>The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.</p>",
-					"instances":[ 
-						{
-							"id": "301",
-							"uri": "https://github.githubassets.com/assets/dark-93f3c6b445d800ff.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/dark-93f3c6b445d800ff.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "HIT",
-							"otherinfo": ""
-						},
-						{
-							"id": "303",
-							"uri": "https://github.githubassets.com/assets/dark_high_contrast-49511e11e3ed53a8.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/dark_high_contrast-49511e11e3ed53a8.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "HIT",
-							"otherinfo": ""
-						},
-						{
-							"id": "308",
-							"uri": "https://github.githubassets.com/assets/light-707b19cf061aa459.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/light-707b19cf061aa459.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "HIT",
-							"otherinfo": ""
-						},
-						{
-							"id": "306",
-							"uri": "https://github.githubassets.com/assets/light_high_contrast-fc4b867e16562d12.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/light_high_contrast-fc4b867e16562d12.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "HIT",
-							"otherinfo": ""
-						},
-						{
-							"id": "299",
-							"uri": "https://github.githubassets.com/assets/primer-primitives-9f1db623a2d85734.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/primer-primitives-9f1db623a2d85734.css",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "HIT",
-							"otherinfo": ""
-						}
-					],
-					"count": "5",
-					"systemic": true,
-					"solution": "<p>Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:</p><p>Cache-Control: no-cache, no-store, must-revalidate, private</p><p>Pragma: no-cache</p><p>Expires: 0</p><p>This configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.</p>",
-					"otherinfo": "",
-					"reference": "<p>https://datatracker.ietf.org/doc/html/rfc7234</p><p>https://datatracker.ietf.org/doc/html/rfc7231</p><p>https://www.rfc-editor.org/rfc/rfc9110.html</p>",
-					"cweid": "525",
-					"wascid": "-1",
-					"sourceid": "409"
-				}
 			]
 		},
 		{
@@ -1023,7 +575,7 @@
 					"desc": "<p>The web/application server is leaking version information via the \"Server\" HTTP response header. Access to such information may facilitate attackers identifying other vulnerabilities your web/application server is subject to.</p>",
 					"instances":[ 
 						{
-							"id": "302",
+							"id": "178",
 							"uri": "https://github.githubassets.com/assets/dark-93f3c6b445d800ff.css",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/dark-93f3c6b445d800ff.css",
 							"method": "GET",
@@ -1033,7 +585,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "304",
+							"id": "173",
 							"uri": "https://github.githubassets.com/assets/dark_high_contrast-49511e11e3ed53a8.css",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/dark_high_contrast-49511e11e3ed53a8.css",
 							"method": "GET",
@@ -1043,7 +595,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "309",
+							"id": "181",
 							"uri": "https://github.githubassets.com/assets/light-707b19cf061aa459.css",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/light-707b19cf061aa459.css",
 							"method": "GET",
@@ -1053,7 +605,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "307",
+							"id": "180",
 							"uri": "https://github.githubassets.com/assets/light_high_contrast-fc4b867e16562d12.css",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/light_high_contrast-fc4b867e16562d12.css",
 							"method": "GET",
@@ -1063,7 +615,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "300",
+							"id": "171",
 							"uri": "https://github.githubassets.com/assets/primer-primitives-9f1db623a2d85734.css",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/primer-primitives-9f1db623a2d85734.css",
 							"method": "GET",
@@ -1080,7 +632,7 @@
 					"reference": "<p>https://httpd.apache.org/docs/current/mod/core.html#servertokens</p><p>https://learn.microsoft.com/en-us/previous-versions/msp-n-p/ff648552(v=pandp.10)</p><p>https://www.troyhunt.com/shhh-dont-let-your-response-headers/</p>",
 					"cweid": "497",
 					"wascid": "13",
-					"sourceid": "409"
+					"sourceid": "401"
 				},
 				{
 					"pluginid": "10027",
@@ -1093,7 +645,7 @@
 					"desc": "<p>The response appears to contain suspicious comments which may help an attacker.</p>",
 					"instances":[ 
 						{
-							"id": "331",
+							"id": "339",
 							"uri": "https://github.githubassets.com/assets/chunk-lazy-element-select-panel-41aa0dbd0a85c593.js",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/chunk-lazy-element-select-panel-41aa0dbd0a85c593.js",
 							"method": "GET",
@@ -1110,7 +662,7 @@
 					"reference": "",
 					"cweid": "615",
 					"wascid": "13",
-					"sourceid": "560"
+					"sourceid": "580"
 				},
 				{
 					"pluginid": "10050",
@@ -1123,7 +675,7 @@
 					"desc": "<p>The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.</p>",
 					"instances":[ 
 						{
-							"id": "301",
+							"id": "175",
 							"uri": "https://github.githubassets.com/assets/dark-93f3c6b445d800ff.css",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/dark-93f3c6b445d800ff.css",
 							"method": "GET",
@@ -1133,7 +685,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "303",
+							"id": "172",
 							"uri": "https://github.githubassets.com/assets/dark_high_contrast-49511e11e3ed53a8.css",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/dark_high_contrast-49511e11e3ed53a8.css",
 							"method": "GET",
@@ -1143,7 +695,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "308",
+							"id": "174",
 							"uri": "https://github.githubassets.com/assets/light-707b19cf061aa459.css",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/light-707b19cf061aa459.css",
 							"method": "GET",
@@ -1153,9 +705,9 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "306",
-							"uri": "https://github.githubassets.com/assets/light_high_contrast-fc4b867e16562d12.css",
-							"nodeName": "https:\/\/github.githubassets.com\/assets\/light_high_contrast-fc4b867e16562d12.css",
+							"id": "176",
+							"uri": "https://github.githubassets.com/assets/primer-73a0e2225731ad3f.css",
+							"nodeName": "https:\/\/github.githubassets.com\/assets\/primer-73a0e2225731ad3f.css",
 							"method": "GET",
 							"param": "",
 							"attack": "",
@@ -1163,7 +715,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "299",
+							"id": "170",
 							"uri": "https://github.githubassets.com/assets/primer-primitives-9f1db623a2d85734.css",
 							"nodeName": "https:\/\/github.githubassets.com\/assets\/primer-primitives-9f1db623a2d85734.css",
 							"method": "GET",
@@ -1180,7 +732,7 @@
 					"reference": "<p>https://datatracker.ietf.org/doc/html/rfc7234</p><p>https://datatracker.ietf.org/doc/html/rfc7231</p><p>https://www.rfc-editor.org/rfc/rfc9110.html</p>",
 					"cweid": "525",
 					"wascid": "-1",
-					"sourceid": "409"
+					"sourceid": "401"
 				}
 			]
 		},
@@ -1201,7 +753,7 @@
 					"desc": "<p>Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks. Including (but not limited to) Cross Site Scripting (XSS), and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.</p>",
 					"instances":[ 
 						{
-							"id": "339",
+							"id": "344",
 							"uri": "https://github.com/in-product-messaging/budget-threshold-banner?organization=juice-shop",
 							"nodeName": "https:\/\/github.com\/in-product-messaging\/budget-threshold-banner (organization)",
 							"method": "GET",
@@ -1211,7 +763,7 @@
 							"otherinfo": "style-src includes unsafe-inline."
 						},
 						{
-							"id": "166",
+							"id": "189",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1221,7 +773,7 @@
 							"otherinfo": "style-src includes unsafe-inline."
 						},
 						{
-							"id": "344",
+							"id": "349",
 							"uri": "https://github.com/juice-shop/juice-shop/funding_links?fragment=1",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop\/funding_links (fragment)",
 							"method": "GET",
@@ -1231,7 +783,7 @@
 							"otherinfo": "style-src includes unsafe-inline."
 						},
 						{
-							"id": "335",
+							"id": "340",
 							"uri": "https://github.com/juice-shop/juice-shop/raw/master/screenshots/slideshow.gif",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop\/raw\/master\/screenshots\/slideshow.gif",
 							"method": "GET",
@@ -1241,7 +793,7 @@
 							"otherinfo": "style-src includes unsafe-inline."
 						},
 						{
-							"id": "342",
+							"id": "346",
 							"uri": "https://github.com/juice-shop/juice-shop/sponsor_button",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop\/sponsor_button",
 							"method": "GET",
@@ -1271,7 +823,7 @@
 					"desc": "<p>The integrity attribute is missing on a script or link tag served by an external server. The integrity tag prevents an attacker who have gained access to this server from injecting a malicious content.</p>",
 					"instances":[ 
 						{
-							"id": "182",
+							"id": "210",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1281,7 +833,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "183",
+							"id": "211",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1291,7 +843,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "180",
+							"id": "208",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1301,7 +853,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "181",
+							"id": "209",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1311,7 +863,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "184",
+							"id": "212",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1328,7 +880,7 @@
 					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Subresource_Integrity</p>",
 					"cweid": "345",
 					"wascid": "15",
-					"sourceid": "398"
+					"sourceid": "394"
 				},
 				{
 					"pluginid": "10010",
@@ -1341,7 +893,7 @@
 					"desc": "<p>A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.</p>",
 					"instances":[ 
 						{
-							"id": "167",
+							"id": "190",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1358,7 +910,7 @@
 					"reference": "<p>https://owasp.org/www-community/HttpOnly</p>",
 					"cweid": "1004",
 					"wascid": "13",
-					"sourceid": "398"
+					"sourceid": "394"
 				},
 				{
 					"pluginid": "10017",
@@ -1371,37 +923,37 @@
 					"desc": "<p>The page includes one or more script files from a third-party domain.</p>",
 					"instances":[ 
 						{
-							"id": "172",
+							"id": "197",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
-							"param": "https://github.githubassets.com/assets/element-registry-29623926f33facdb.js",
+							"param": "https://github.githubassets.com/assets/element-registry-fd825f0217aa22be.js",
 							"attack": "",
-							"evidence": "<script crossorigin=\"anonymous\" type=\"module\" src=\"https://github.githubassets.com/assets/element-registry-29623926f33facdb.js\" defer=\"defer\"></script>",
+							"evidence": "<script crossorigin=\"anonymous\" type=\"module\" src=\"https://github.githubassets.com/assets/element-registry-fd825f0217aa22be.js\" defer=\"defer\"></script>",
 							"otherinfo": ""
 						},
 						{
-							"id": "170",
+							"id": "195",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
-							"param": "https://github.githubassets.com/assets/environment-b475e790cdeee2d1.js",
+							"param": "https://github.githubassets.com/assets/environment-2b360899a0398dfe.js",
 							"attack": "",
-							"evidence": "<script crossorigin=\"anonymous\" type=\"module\" src=\"https://github.githubassets.com/assets/environment-b475e790cdeee2d1.js\" defer=\"defer\"></script>",
+							"evidence": "<script crossorigin=\"anonymous\" type=\"module\" src=\"https://github.githubassets.com/assets/environment-2b360899a0398dfe.js\" defer=\"defer\"></script>",
 							"otherinfo": ""
 						},
 						{
-							"id": "171",
+							"id": "196",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
-							"param": "https://github.githubassets.com/assets/github-elements-246359dc43e66dfb.js",
+							"param": "https://github.githubassets.com/assets/github-elements-5b391913b9a5948b.js",
 							"attack": "",
-							"evidence": "<script crossorigin=\"anonymous\" type=\"module\" src=\"https://github.githubassets.com/assets/github-elements-246359dc43e66dfb.js\" defer=\"defer\"></script>",
+							"evidence": "<script crossorigin=\"anonymous\" type=\"module\" src=\"https://github.githubassets.com/assets/github-elements-5b391913b9a5948b.js\" defer=\"defer\"></script>",
 							"otherinfo": ""
 						},
 						{
-							"id": "168",
+							"id": "191",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1411,13 +963,13 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "169",
+							"id": "193",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
-							"param": "https://github.githubassets.com/assets/wp-runtime-fbfbc511b94fc727.js",
+							"param": "https://github.githubassets.com/assets/wp-runtime-79c81489b36e213d.js",
 							"attack": "",
-							"evidence": "<script crossorigin=\"anonymous\" type=\"module\" src=\"https://github.githubassets.com/assets/wp-runtime-fbfbc511b94fc727.js\" defer=\"defer\"></script>",
+							"evidence": "<script crossorigin=\"anonymous\" type=\"module\" src=\"https://github.githubassets.com/assets/wp-runtime-79c81489b36e213d.js\" defer=\"defer\"></script>",
 							"otherinfo": ""
 						}
 					],
@@ -1428,7 +980,7 @@
 					"reference": "",
 					"cweid": "829",
 					"wascid": "15",
-					"sourceid": "398"
+					"sourceid": "394"
 				},
 				{
 					"pluginid": "120000",
@@ -1441,27 +993,27 @@
 					"desc": "<p>Information was stored in browser localStorage.</p><p>This is not unusual or necessarily unsafe - this informational alert has been raised to help you get a better understanding of what this app is doing. For more details see the Client tabs - this information was set directly in the browser and will therefore not necessarily appear in this form in any HTTP(S) messages.</p>",
 					"instances":[ 
 						{
-							"id": "327",
+							"id": "331",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
 							"param": "offline_cache_last_cleanup::offline_cache_v2::undefined::queries",
 							"attack": "",
 							"evidence": "",
-							"otherinfo": "The following data (key=value) was set: offline_cache_last_cleanup::offline_cache_v2::undefined::queries=1787002334564\nNote that this alert will only be raised once for each URL + key."
+							"otherinfo": "The following data (key=value) was set: offline_cache_last_cleanup::offline_cache_v2::undefined::queries=1786896129592\nNote that this alert will only be raised once for each URL + key."
 						},
 						{
-							"id": "326",
+							"id": "330",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
 							"param": "offline_cache_schema_first_seen::offline_cache_v2::",
 							"attack": "",
 							"evidence": "",
-							"otherinfo": "The following data (key=value) was set: offline_cache_schema_first_seen::offline_cache_v2::=1787002334546\nNote that this alert will only be raised once for each URL + key."
+							"otherinfo": "The following data (key=value) was set: offline_cache_schema_first_seen::offline_cache_v2::=1786896129545\nNote that this alert will only be raised once for each URL + key."
 						},
 						{
-							"id": "325",
+							"id": "332",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1474,11 +1026,11 @@
 					"count": "3",
 					"systemic": false,
 					"solution": "<p>This is an informational alert and no action is necessary. </p>",
-					"otherinfo": "<p>The following data (key=value) was set: offline_cache_last_cleanup::offline_cache_v2::undefined::queries=1787002334564</p><p>Note that this alert will only be raised once for each URL + key.</p>",
+					"otherinfo": "<p>The following data (key=value) was set: offline_cache_last_cleanup::offline_cache_v2::undefined::queries=1786896129592</p><p>Note that this alert will only be raised once for each URL + key.</p>",
 					"reference": "",
 					"cweid": "359",
 					"wascid": "13",
-					"sourceid": "679"
+					"sourceid": "678"
 				},
 				{
 					"pluginid": "120000",
@@ -1491,7 +1043,7 @@
 					"desc": "<p>Information was stored in browser sessionStorage.</p><p>This is not unusual or necessarily unsafe - this informational alert has been raised to help you get a better understanding of what this app is doing. For more details see the Client tabs - this information was set directly in the browser and will therefore not necessarily appear in this form in any HTTP(S) messages.</p>",
 					"instances":[ 
 						{
-							"id": "324",
+							"id": "329",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1508,7 +1060,7 @@
 					"reference": "",
 					"cweid": "359",
 					"wascid": "13",
-					"sourceid": "655"
+					"sourceid": "676"
 				},
 				{
 					"pluginid": "10015",
@@ -1521,7 +1073,7 @@
 					"desc": "<p>The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.</p>",
 					"instances":[ 
 						{
-							"id": "165",
+							"id": "188",
 							"uri": "https://github.com/juice-shop/juice-shop",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop",
 							"method": "GET",
@@ -1531,7 +1083,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "333",
+							"id": "335",
 							"uri": "https://github.com/juice-shop/juice-shop/branch-and-tag-count",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop\/branch-and-tag-count",
 							"method": "GET",
@@ -1541,7 +1093,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "334",
+							"id": "337",
 							"uri": "https://github.com/juice-shop/juice-shop/latest-commit",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop\/latest-commit",
 							"method": "GET",
@@ -1551,7 +1103,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "332",
+							"id": "336",
 							"uri": "https://github.com/juice-shop/juice-shop/recently-touched-branches",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop\/recently-touched-branches",
 							"method": "GET",
@@ -1561,7 +1113,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "336",
+							"id": "341",
 							"uri": "https://github.com/juice-shop/juice-shop/tree-commit-info",
 							"nodeName": "https:\/\/github.com\/juice-shop\/juice-shop\/tree-commit-info",
 							"method": "GET",
@@ -1578,7 +1130,7 @@
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#web-content-caching</p><p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control</p><p>https://grayduck.mn/2021/09/13/cache-control-recommendations/</p>",
 					"cweid": "525",
 					"wascid": "13",
-					"sourceid": "398"
+					"sourceid": "394"
 				}
 			]
 		},
@@ -1599,13 +1151,13 @@
 					"desc": "<p>URL redirectors represent common functionality employed by web sites to forward an incoming request to an alternate resource. This can be done for a variety of reasons and is often done to allow resources to be moved within the directory structure and to avoid breaking functionality for users that request the resource at its previous location. URL redirectors may also be used to implement load balancing, leveraging abbreviated URLs or recording outgoing links. It is this last implementation which is often used in phishing attacks as described in the example below. URL redirectors do not necessarily represent a direct security vulnerability but can be abused by attackers trying to social engineer victims into believing that they are navigating to a site other than the true destination.</p>",
 					"instances":[ 
 						{
-							"id": "384",
-							"uri": "http://juiceshop:3000/redirect?to=https%3A%2F%2F2475511155332199870.owasp.org%2F%3Fhttps%3A%2F%2Fgithub.com%2Fjuice-shop%2Fjuice-shop",
+							"id": "352",
+							"uri": "http://juiceshop:3000/redirect?to=https%3A%2F%2F2877686882539975274.owasp.org%2F%3Fhttps%3A%2F%2Fgithub.com%2Fjuice-shop%2Fjuice-shop",
 							"nodeName": "http:\/\/juiceshop:3000\/redirect (to)",
 							"method": "GET",
 							"param": "to",
-							"attack": "https://2475511155332199870.owasp.org/?https://github.com/juice-shop/juice-shop",
-							"evidence": "https://2475511155332199870.owasp.org/?@@@original@@@",
+							"attack": "https://2877686882539975274.owasp.org/?https://github.com/juice-shop/juice-shop",
+							"evidence": "https://2877686882539975274.owasp.org/?@@@original@@@",
 							"otherinfo": "The response contains a redirect in its Location header which allows an external Url to be set."
 						}
 					],
@@ -1616,7 +1168,7 @@
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html</p><p>https://cwe.mitre.org/data/definitions/601.html</p>",
 					"cweid": "601",
 					"wascid": "38",
-					"sourceid": "4381"
+					"sourceid": "3498"
 				},
 				{
 					"pluginid": "10028",
@@ -1629,7 +1181,7 @@
 					"desc": "<p>Open redirects are one of the OWASP 2010 Top Ten vulnerabilities. This check looks at user-supplied input in query string parameters and POST data to identify where open redirects might be possible. Open redirects occur when an application allows user-supplied input (e.g. https://nottrusted.com) to control an off-site destination. This is generally a pretty accurate way to find where 301 or 302 redirects could be exploited by spammers or phishing attacks.</p><p></p><p>For example an attacker could supply a user with the following link: https://example.com/example.php?url=https://malicious.example.com.</p><p></p><p>NOTE: For the purposes of the passive check the authority portion of the origin and destination were compared. Manual testing may be required to validate the impact of this finding.</p>",
 					"instances":[ 
 						{
-							"id": "164",
+							"id": "167",
 							"uri": "http://juiceshop:3000/redirect?to=https://github.com/juice-shop/juice-shop",
 							"nodeName": "http:\/\/juiceshop:3000\/redirect (to)",
 							"method": "GET",
@@ -1646,7 +1198,7 @@
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html</p><p>https://cwe.mitre.org/data/definitions/601.html</p>",
 					"cweid": "601",
 					"wascid": "38",
-					"sourceid": "393"
+					"sourceid": "390"
 				},
 				{
 					"pluginid": "40018",
@@ -1659,7 +1211,7 @@
 					"desc": "<p>SQL injection may be possible.</p>",
 					"instances":[ 
 						{
-							"id": "386",
+							"id": "354",
 							"uri": "http://juiceshop:3000/rest/products/search?q=%27%28",
 							"nodeName": "http:\/\/juiceshop:3000\/rest\/products\/search (q)",
 							"method": "GET",
@@ -1669,7 +1221,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "385",
+							"id": "353",
 							"uri": "http://juiceshop:3000/rest/user/login",
 							"nodeName": "http:\/\/juiceshop:3000\/rest\/user\/login ()({email,password})",
 							"method": "POST",
@@ -1686,37 +1238,7 @@
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html</p>",
 					"cweid": "89",
 					"wascid": "19",
-					"sourceid": "6353"
-				},
-				{
-					"pluginid": "43",
-					"alertRef": "43",
-					"alert": "Source Code Disclosure - File Inclusion",
-					"name": "Source Code Disclosure - File Inclusion",
-					"riskcode": "3",
-					"confidence": "2",
-					"riskdesc": "High (Medium)",
-					"desc": "<p>The Path Traversal attack technique allows an attacker access to files, directories, and commands that potentially reside outside the web document root directory. An attacker may manipulate a URL in such a way that the web site will execute or reveal the contents of arbitrary files anywhere on the web server. Any device that exposes an HTTP-based interface is potentially vulnerable to Path Traversal.</p><p></p><p>Most web sites restrict user access to a specific portion of the file-system, typically called the \"web document root\" or \"CGI root\" directory. These directories contain the files intended for user access and the executable necessary to drive web application functionality. To access files or execute commands anywhere on the file-system, Path Traversal attacks will utilize the ability of special-characters sequences.</p><p></p><p>The most basic Path Traversal attack uses the \"../\" special-character sequence to alter the resource location requested in the URL. Although most popular web servers will prevent this technique from escaping the web document root, alternate encodings of the \"../\" sequence may help bypass the security filters. These method variations include valid and invalid Unicode-encoding (\"..%u2216\" or \"..%c0%af\") of the forward slash character, backslash characters (\"..\\\") on Windows-based servers, URL encoded characters \"%2e%2e%2f\"), and double URL encoding (\"..%255c\") of the backslash character.</p><p></p><p>Even if the web server properly restricts Path Traversal attempts in the URL path, a web application itself may still be vulnerable due to improper handling of user-supplied input. This is a common problem of web applications that use template mechanisms or load static text from files. In variations of the attack, the original URL parameter value is substituted with the file name of one of the web application's dynamic scripts. Consequently, the results can reveal source code because the file is interpreted as text instead of an executable script. These techniques often employ additional special characters such as the dot (\".\") to reveal the listing of the current working directory, or \"%00\" NULL characters in order to bypass rudimentary file extension checks.</p>",
-					"instances":[ 
-						{
-							"id": "615",
-							"uri": "http://juiceshop:3000/api/Challenges/?sort=name",
-							"nodeName": "http:\/\/juiceshop:3000\/api\/Challenges\/ (sort)",
-							"method": "GET",
-							"param": "sort",
-							"attack": "../",
-							"evidence": "",
-							"otherinfo": "The output for the source code filename [../] differs sufficiently from that of the random parameter [uusvwvgjgfppismbnpvgvaqqcgqkgcrbgjpylf], at [75%], compared to a threshold of [75%]"
-						}
-					],
-					"count": "1",
-					"systemic": false,
-					"solution": "<p>Assume all input is malicious. Use an \"accept known good\" input validation strategy, i.e., use an allow list of acceptable inputs that strictly conform to specifications. Reject any input that does not strictly conform to specifications, or transform it into something that does. Do not rely exclusively on looking for malicious or malformed inputs (i.e., do not rely on a deny list). However, deny lists can be useful for detecting potential attacks or determining which inputs are so malformed that they should be rejected outright.</p><p></p><p>When performing input validation, consider all potentially relevant properties, including length, type of input, the full range of acceptable values, missing or extra inputs, syntax, consistency across related fields, and conformance to business rules. As an example of business rule logic, \"boat\" may be syntactically valid because it only contains alphanumeric characters, but it is not valid if you are expecting colors such as \"red\" or \"blue.\"</p><p></p><p>For filenames, use stringent allow lists that limit the character set to be used. If feasible, only allow a single \".\" character in the filename to avoid weaknesses, and exclude directory separators such as \"/\". Use an allow list of allowable file extensions.</p><p></p><p>Warning: if you attempt to cleanse your data, then do so that the end result is not in the form that can be dangerous. A sanitizing mechanism can remove characters such as '.' and ';' which may be required for some exploits. An attacker can try to fool the sanitizing mechanism into \"cleaning\" data into a dangerous form. Suppose the attacker injects a '.' inside a filename (e.g. \"sensi.tiveFile\") and the sanitizing mechanism removes the character resulting in the valid filename, \"sensitiveFile\". If the input data are now assumed to be safe, then the file may be compromised. </p><p></p><p>Inputs should be decoded and canonicalized to the application's current internal representation before being validated. Make sure that your application does not decode the same input twice. Such errors could be used to bypass allow list schemes by introducing dangerous inputs after they have been checked.</p><p></p><p>Use a built-in path canonicalization function (such as realpath() in C) that produces the canonical version of the pathname, which effectively removes \"..\" sequences and symbolic links.</p><p></p><p>Run your code using the lowest privileges that are required to accomplish the necessary tasks. If possible, create isolated accounts with limited privileges that are only used for a single task. That way, a successful attack will not immediately give the attacker access to the rest of the software or its environment. For example, database applications rarely need to run as the database administrator, especially in day-to-day operations.</p><p></p><p>When the set of acceptable objects, such as filenames or URLs, is limited or known, create a mapping from a set of fixed input values (such as numeric IDs) to the actual filenames or URLs, and reject all other inputs.</p><p></p><p>Run your code in a \"jail\" or similar sandbox environment that enforces strict boundaries between the process and the operating system. This may effectively restrict which files can be accessed in a particular directory or which commands can be executed by your software.</p><p></p><p>OS-level examples include the Unix chroot jail, AppArmor, and SELinux. In general, managed code may provide some protection. For example, java.io.FilePermission in the Java SecurityManager allows you to specify restrictions on file operations.</p><p></p><p>This may not be a feasible solution, and it only limits the impact to the operating system; the rest of your application may still be subject to compromise.</p><p></p>",
-					"otherinfo": "<p>The output for the source code filename [../] differs sufficiently from that of the random parameter [uusvwvgjgfppismbnpvgvaqqcgqkgcrbgjpylf], at [75%], compared to a threshold of [75%]</p>",
-					"reference": "<p>https://owasp.org/www-community/attacks/Path_Traversal</p><p>https://cwe.mitre.org/data/definitions/22.html</p>",
-					"cweid": "541",
-					"wascid": "33",
-					"sourceid": "18804"
+					"sourceid": "5042"
 				},
 				{
 					"pluginid": "10095",
@@ -1729,7 +1251,7 @@
 					"desc": "<p>A backup of the file was disclosed by the web server.</p>",
 					"instances":[ 
 						{
-							"id": "631",
+							"id": "570",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy",
 							"method": "GET",
@@ -1739,7 +1261,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy]"
 						},
 						{
-							"id": "632",
+							"id": "571",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (2)",
 							"method": "GET",
@@ -1749,7 +1271,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)]"
 						},
 						{
-							"id": "626",
+							"id": "577",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_linux_amd_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (2)\/juicy_malware_linux_amd_64.url",
 							"method": "GET",
@@ -1759,7 +1281,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_linux_amd_64.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_linux_amd_64.url]"
 						},
 						{
-							"id": "637",
+							"id": "576",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_linux_arm_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (2)\/juicy_malware_linux_arm_64.url",
 							"method": "GET",
@@ -1769,7 +1291,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_linux_arm_64.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_linux_arm_64.url]"
 						},
 						{
-							"id": "638",
+							"id": "584",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_macos_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (2)\/juicy_malware_macos_64.url",
 							"method": "GET",
@@ -1779,7 +1301,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_macos_64.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_macos_64.url]"
 						},
 						{
-							"id": "644",
+							"id": "585",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_windows_64.exe.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (2)\/juicy_malware_windows_64.exe.url",
 							"method": "GET",
@@ -1789,7 +1311,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_windows_64.exe.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(2)/juicy_malware_windows_64.exe.url]"
 						},
 						{
-							"id": "633",
+							"id": "572",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (3)",
 							"method": "GET",
@@ -1799,7 +1321,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)]"
 						},
 						{
-							"id": "628",
+							"id": "578",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)/juicy_malware_linux_amd_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (3)\/juicy_malware_linux_amd_64.url",
 							"method": "GET",
@@ -1809,7 +1331,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_linux_amd_64.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)/juicy_malware_linux_amd_64.url]"
 						},
 						{
-							"id": "639",
+							"id": "579",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)/juicy_malware_linux_arm_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (3)\/juicy_malware_linux_arm_64.url",
 							"method": "GET",
@@ -1819,7 +1341,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_linux_arm_64.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)/juicy_malware_linux_arm_64.url]"
 						},
 						{
-							"id": "640",
+							"id": "586",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)/juicy_malware_macos_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (3)\/juicy_malware_macos_64.url",
 							"method": "GET",
@@ -1829,7 +1351,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_macos_64.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)/juicy_malware_macos_64.url]"
 						},
 						{
-							"id": "645",
+							"id": "587",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)/juicy_malware_windows_64.exe.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy (3)\/juicy_malware_windows_64.exe.url",
 							"method": "GET",
@@ -1839,7 +1361,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_windows_64.exe.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy%20(3)/juicy_malware_windows_64.exe.url]"
 						},
 						{
-							"id": "624",
+							"id": "574",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy/juicy_malware_linux_amd_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy\/juicy_malware_linux_amd_64.url",
 							"method": "GET",
@@ -1849,7 +1371,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_linux_amd_64.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy/juicy_malware_linux_amd_64.url]"
 						},
 						{
-							"id": "635",
+							"id": "575",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy/juicy_malware_linux_arm_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy\/juicy_malware_linux_arm_64.url",
 							"method": "GET",
@@ -1859,7 +1381,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_linux_arm_64.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy/juicy_malware_linux_arm_64.url]"
 						},
 						{
-							"id": "636",
+							"id": "582",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy/juicy_malware_macos_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy\/juicy_malware_macos_64.url",
 							"method": "GET",
@@ -1869,7 +1391,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_macos_64.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy/juicy_malware_macos_64.url]"
 						},
 						{
-							"id": "643",
+							"id": "583",
 							"uri": "http://juiceshop:3000/ftp/quarantine%20-%20Copy/juicy_malware_windows_64.exe.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine - Copy\/juicy_malware_windows_64.exe.url",
 							"method": "GET",
@@ -1879,7 +1401,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_windows_64.exe.url] is available at [http://juiceshop:3000/ftp/quarantine%20-%20Copy/juicy_malware_windows_64.exe.url]"
 						},
 						{
-							"id": "618",
+							"id": "561",
 							"uri": "http://juiceshop:3000/ftp/quarantine.bac",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.bac",
 							"method": "GET",
@@ -1889,7 +1411,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.bac]"
 						},
 						{
-							"id": "617",
+							"id": "560",
 							"uri": "http://juiceshop:3000/ftp/quarantine.backup",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.backup",
 							"method": "GET",
@@ -1899,7 +1421,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.backup]"
 						},
 						{
-							"id": "616",
+							"id": "559",
 							"uri": "http://juiceshop:3000/ftp/quarantine.bak",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.bak",
 							"method": "GET",
@@ -1909,7 +1431,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.bak]"
 						},
 						{
-							"id": "621",
+							"id": "564",
 							"uri": "http://juiceshop:3000/ftp/quarantine.jar",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.jar",
 							"method": "GET",
@@ -1919,7 +1441,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.jar]"
 						},
 						{
-							"id": "622",
+							"id": "565",
 							"uri": "http://juiceshop:3000/ftp/quarantine.log",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.log",
 							"method": "GET",
@@ -1929,7 +1451,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.log]"
 						},
 						{
-							"id": "627",
+							"id": "568",
 							"uri": "http://juiceshop:3000/ftp/quarantine.old",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.old",
 							"method": "GET",
@@ -1939,7 +1461,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.old]"
 						},
 						{
-							"id": "623",
+							"id": "566",
 							"uri": "http://juiceshop:3000/ftp/quarantine.swp",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.swp",
 							"method": "GET",
@@ -1949,7 +1471,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.swp]"
 						},
 						{
-							"id": "620",
+							"id": "563",
 							"uri": "http://juiceshop:3000/ftp/quarantine.tar",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.tar",
 							"method": "GET",
@@ -1959,7 +1481,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.tar]"
 						},
 						{
-							"id": "619",
+							"id": "562",
 							"uri": "http://juiceshop:3000/ftp/quarantine.zip",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.zip",
 							"method": "GET",
@@ -1969,7 +1491,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.zip]"
 						},
 						{
-							"id": "629",
+							"id": "569",
 							"uri": "http://juiceshop:3000/ftp/quarantine.~bk",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine.~bk",
 							"method": "GET",
@@ -1979,7 +1501,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantine.~bk]"
 						},
 						{
-							"id": "634",
+							"id": "573",
 							"uri": "http://juiceshop:3000/ftp/quarantinebackup",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantinebackup",
 							"method": "GET",
@@ -1989,7 +1511,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine] is available at [http://juiceshop:3000/ftp/quarantinebackup]"
 						},
 						{
-							"id": "630",
+							"id": "580",
 							"uri": "http://juiceshop:3000/ftp/quarantinebackup/juicy_malware_linux_amd_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantinebackup\/juicy_malware_linux_amd_64.url",
 							"method": "GET",
@@ -1999,7 +1521,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_linux_amd_64.url] is available at [http://juiceshop:3000/ftp/quarantinebackup/juicy_malware_linux_amd_64.url]"
 						},
 						{
-							"id": "641",
+							"id": "581",
 							"uri": "http://juiceshop:3000/ftp/quarantinebackup/juicy_malware_linux_arm_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantinebackup\/juicy_malware_linux_arm_64.url",
 							"method": "GET",
@@ -2009,7 +1531,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_linux_arm_64.url] is available at [http://juiceshop:3000/ftp/quarantinebackup/juicy_malware_linux_arm_64.url]"
 						},
 						{
-							"id": "642",
+							"id": "588",
 							"uri": "http://juiceshop:3000/ftp/quarantinebackup/juicy_malware_macos_64.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantinebackup\/juicy_malware_macos_64.url",
 							"method": "GET",
@@ -2019,7 +1541,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_macos_64.url] is available at [http://juiceshop:3000/ftp/quarantinebackup/juicy_malware_macos_64.url]"
 						},
 						{
-							"id": "646",
+							"id": "589",
 							"uri": "http://juiceshop:3000/ftp/quarantinebackup/juicy_malware_windows_64.exe.url",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantinebackup\/juicy_malware_windows_64.exe.url",
 							"method": "GET",
@@ -2029,7 +1551,7 @@
 							"otherinfo": "A backup of [http://juiceshop:3000/ftp/quarantine/juicy_malware_windows_64.exe.url] is available at [http://juiceshop:3000/ftp/quarantinebackup/juicy_malware_windows_64.exe.url]"
 						},
 						{
-							"id": "625",
+							"id": "567",
 							"uri": "http://juiceshop:3000/ftp/quarantine~",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp\/quarantine~",
 							"method": "GET",
@@ -2046,7 +1568,7 @@
 					"reference": "<p>https://cwe.mitre.org/data/definitions/530.html</p><p>https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information.html</p>",
 					"cweid": "530",
 					"wascid": "34",
-					"sourceid": "23942"
+					"sourceid": "19815"
 				},
 				{
 					"pluginid": "40038",
@@ -2059,7 +1581,7 @@
 					"desc": "<p>Bypassing 403 endpoints may be possible, the scan rule sent a payload that caused the response to be accessible (status code 200).</p>",
 					"instances":[ 
 						{
-							"id": "647",
+							"id": "590",
 							"uri": "http://juiceshop:3000/%2e/ftp/coupons_2013.md.bak",
 							"nodeName": "http:\/\/juiceshop:3000\/.\/ftp\/coupons_2013.md.bak",
 							"method": "GET",
@@ -2069,7 +1591,7 @@
 							"otherinfo": "http://juiceshop:3000/ftp/coupons_2013.md.bak"
 						},
 						{
-							"id": "648",
+							"id": "591",
 							"uri": "http://juiceshop:3000/%2e/ftp/eastere.gg",
 							"nodeName": "http:\/\/juiceshop:3000\/.\/ftp\/eastere.gg",
 							"method": "GET",
@@ -2079,7 +1601,7 @@
 							"otherinfo": "http://juiceshop:3000/ftp/eastere.gg"
 						},
 						{
-							"id": "649",
+							"id": "592",
 							"uri": "http://juiceshop:3000/%2e/ftp/encrypt.pyc",
 							"nodeName": "http:\/\/juiceshop:3000\/.\/ftp\/encrypt.pyc",
 							"method": "GET",
@@ -2089,7 +1611,7 @@
 							"otherinfo": "http://juiceshop:3000/ftp/encrypt.pyc"
 						},
 						{
-							"id": "650",
+							"id": "593",
 							"uri": "http://juiceshop:3000/%2e/ftp/package-lock.json.bak",
 							"nodeName": "http:\/\/juiceshop:3000\/.\/ftp\/package-lock.json.bak",
 							"method": "GET",
@@ -2099,7 +1621,7 @@
 							"otherinfo": "http://juiceshop:3000/ftp/package-lock.json.bak"
 						},
 						{
-							"id": "651",
+							"id": "594",
 							"uri": "http://juiceshop:3000/%2e/ftp/package.json.bak",
 							"nodeName": "http:\/\/juiceshop:3000\/.\/ftp\/package.json.bak",
 							"method": "GET",
@@ -2109,7 +1631,7 @@
 							"otherinfo": "http://juiceshop:3000/ftp/package.json.bak"
 						},
 						{
-							"id": "652",
+							"id": "595",
 							"uri": "http://juiceshop:3000/%2e/ftp/suspicious_errors.yml",
 							"nodeName": "http:\/\/juiceshop:3000\/.\/ftp\/suspicious_errors.yml",
 							"method": "GET",
@@ -2126,7 +1648,7 @@
 					"reference": "<p>https://www.acunetix.com/blog/articles/a-fresh-look-on-reverse-proxy-related-attacks/</p><p>https://i.blackhat.com/us-18/Wed-August-8/us-18-Orange-Tsai-Breaking-Parser-Logic-Take-Your-Path-Normalization-Off-And-Pop-0days-Out-2.pdf</p><p>https://seclists.org/fulldisclosure/2011/Oct/273</p>",
 					"cweid": "348",
 					"wascid": "0",
-					"sourceid": "30601"
+					"sourceid": "24386"
 				},
 				{
 					"pluginid": "40040",
@@ -2139,52 +1661,52 @@
 					"desc": "<p>This CORS misconfiguration could allow an attacker to perform AJAX queries to the vulnerable website from a malicious page loaded by the victim's user agent.</p><p>In order to perform authenticated AJAX queries, the server must specify the header \"Access-Control-Allow-Credentials: true\" and the \"Access-Control-Allow-Origin\" header must be set to null or the malicious page's domain. Even if this misconfiguration doesn't allow authenticated AJAX requests, unauthenticated sensitive content can still be accessed (e.g intranet websites).</p><p>A malicious page can belong to a malicious website but also a trusted website with flaws (e.g XSS, support of HTTP without TLS allowing code injection through MITM, etc).</p>",
 					"instances":[ 
 						{
-							"id": "659",
+							"id": "602",
 							"uri": "http://juiceshop:3000/api/Feedbacks/",
 							"nodeName": "http:\/\/juiceshop:3000\/api\/Feedbacks\/",
 							"method": "GET",
 							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
+							"attack": "origin: http://4m4e2Om4.com",
 							"evidence": "",
 							"otherinfo": ""
 						},
 						{
-							"id": "658",
+							"id": "601",
 							"uri": "http://juiceshop:3000/api/Quantitys/",
 							"nodeName": "http:\/\/juiceshop:3000\/api\/Quantitys\/",
 							"method": "GET",
 							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
+							"attack": "origin: http://4m4e2Om4.com",
 							"evidence": "",
 							"otherinfo": ""
 						},
 						{
-							"id": "657",
+							"id": "600",
 							"uri": "http://juiceshop:3000/api/SecurityQuestions/",
 							"nodeName": "http:\/\/juiceshop:3000\/api\/SecurityQuestions\/",
 							"method": "GET",
 							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
+							"attack": "origin: http://4m4e2Om4.com",
 							"evidence": "",
 							"otherinfo": ""
 						},
 						{
-							"id": "656",
+							"id": "599",
 							"uri": "http://juiceshop:3000/rest/captcha/",
 							"nodeName": "http:\/\/juiceshop:3000\/rest\/captcha\/",
 							"method": "GET",
 							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
+							"attack": "origin: http://4m4e2Om4.com",
 							"evidence": "",
 							"otherinfo": ""
 						},
 						{
-							"id": "655",
+							"id": "598",
 							"uri": "http://juiceshop:3000/rest/memories/",
 							"nodeName": "http:\/\/juiceshop:3000\/rest\/memories\/",
 							"method": "GET",
 							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
+							"attack": "origin: http://4m4e2Om4.com",
 							"evidence": "",
 							"otherinfo": ""
 						}
@@ -2196,7 +1718,7 @@
 					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS</p><p>https://portswigger.net/web-security/cors</p>",
 					"cweid": "942",
 					"wascid": "14",
-					"sourceid": "30811"
+					"sourceid": "24545"
 				},
 				{
 					"pluginid": "10038",
@@ -2209,7 +1731,7 @@
 					"desc": "<p>Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.</p>",
 					"instances":[ 
 						{
-							"id": "11",
+							"id": "24",
 							"uri": "http://juiceshop:3000",
 							"nodeName": "http:\/\/juiceshop:3000",
 							"method": "GET",
@@ -2229,9 +1751,19 @@
 							"otherinfo": ""
 						},
 						{
+							"id": "78",
+							"uri": "http://juiceshop:3000/ftp",
+							"nodeName": "http:\/\/juiceshop:3000\/ftp",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
 							"id": "81",
-							"uri": "http://juiceshop:3000/ftp/eastere.gg",
-							"nodeName": "http:\/\/juiceshop:3000\/ftp\/eastere.gg",
+							"uri": "http://juiceshop:3000/ftp/package.json.bak",
+							"nodeName": "http:\/\/juiceshop:3000\/ftp\/package.json.bak",
 							"method": "GET",
 							"param": "",
 							"attack": "",
@@ -2239,17 +1771,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "80",
-							"uri": "http://juiceshop:3000/ftp/encrypt.pyc",
-							"nodeName": "http:\/\/juiceshop:3000\/ftp\/encrypt.pyc",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "13",
+							"id": "14",
 							"uri": "http://juiceshop:3000/sitemap.xml",
 							"nodeName": "http:\/\/juiceshop:3000\/sitemap.xml",
 							"method": "GET",
@@ -2266,7 +1788,7 @@
 					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP</p><p>https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html</p><p>https://www.w3.org/TR/CSP/</p><p>https://w3c.github.io/webappsec-csp/</p><p>https://web.dev/articles/csp</p><p>https://caniuse.com/#feat=contentsecuritypolicy</p><p>https://content-security-policy.com/</p>",
 					"cweid": "693",
 					"wascid": "15",
-					"sourceid": "8"
+					"sourceid": "9"
 				},
 				{
 					"pluginid": "10098",
@@ -2279,16 +1801,6 @@
 					"desc": "<p>Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.</p>",
 					"instances":[ 
 						{
-							"id": "12",
-							"uri": "http://juiceshop:3000",
-							"nodeName": "http:\/\/juiceshop:3000",
-							"method": "GET",
-							"param": "",
-							"attack": "",
-							"evidence": "Access-Control-Allow-Origin: *",
-							"otherinfo": "The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing."
-						},
-						{
 							"id": "1",
 							"uri": "http://juiceshop:3000/",
 							"nodeName": "http:\/\/juiceshop:3000\/",
@@ -2299,7 +1811,17 @@
 							"otherinfo": "The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing."
 						},
 						{
-							"id": "38",
+							"id": "10",
+							"uri": "http://juiceshop:3000/assets/public/favicon_js.ico",
+							"nodeName": "http:\/\/juiceshop:3000\/assets\/public\/favicon_js.ico",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Access-Control-Allow-Origin: *",
+							"otherinfo": "The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing."
+						},
+						{
+							"id": "9",
 							"uri": "http://juiceshop:3000/polyfills.js",
 							"nodeName": "http:\/\/juiceshop:3000\/polyfills.js",
 							"method": "GET",
@@ -2309,7 +1831,7 @@
 							"otherinfo": "The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing."
 						},
 						{
-							"id": "9",
+							"id": "11",
 							"uri": "http://juiceshop:3000/robots.txt",
 							"nodeName": "http:\/\/juiceshop:3000\/robots.txt",
 							"method": "GET",
@@ -2336,7 +1858,7 @@
 					"reference": "<p>https://vulncat.fortify.com/en/detail?category=HTML5&subcategory=Overly%20Permissive%20CORS%20Policy</p>",
 					"cweid": "264",
 					"wascid": "14",
-					"sourceid": "8"
+					"sourceid": "1"
 				},
 				{
 					"pluginid": "10020",
@@ -2349,8 +1871,8 @@
 					"desc": "<p>The response does not protect against 'ClickJacking' attacks. It should include either Content-Security-Policy with 'frame-ancestors' directive or X-Frame-Options.</p>",
 					"instances":[ 
 						{
-							"id": "120",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepMS&sid=WIRY0lAUqD2iYl0rAAAH",
+							"id": "124",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgBk&sid=cAmfpShL7jraRWSlAAAA",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(40)",
 							"method": "POST",
 							"param": "x-frame-options",
@@ -2360,18 +1882,8 @@
 						},
 						{
 							"id": "131",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepPn&sid=WIRY0lAUqD2iYl0rAAAH",
-							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"9c297196ecf8...)",
-							"method": "POST",
-							"param": "x-frame-options",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "126",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepOP&sid=WIRY0lAUqD2iYl0rAAAH",
-							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"b2bbb412cd02...)",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgDl&sid=cAmfpShL7jraRWSlAAAA",
+							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"8d2072c6b0a4...)",
 							"method": "POST",
 							"param": "x-frame-options",
 							"attack": "",
@@ -2379,7 +1891,7 @@
 							"otherinfo": ""
 						}
 					],
-					"count": "3",
+					"count": "2",
 					"systemic": false,
 					"solution": "<p>Modern Web browsers support the Content-Security-Policy and X-Frame-Options HTTP headers. Ensure one of them is set on all web pages returned by your site/app.</p><p>If you expect the page to be framed only by pages on your server (e.g. it's part of a FRAMESET) then you'll want to use SAMEORIGIN, otherwise if you never expect the page to be framed, you should use DENY. Alternatively consider implementing Content Security Policy's \"frame-ancestors\" directive.</p>",
 					"otherinfo": "",
@@ -2399,53 +1911,53 @@
 					"desc": "<p>URL rewrite is used to track user session ID. The session ID may be disclosed via cross-site referer header. In addition, the session ID might be stored in browser history or server logs.</p>",
 					"instances":[ 
 						{
-							"id": "123",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepMT&sid=WIRY0lAUqD2iYl0rAAAH",
+							"id": "129",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgBl&sid=cAmfpShL7jraRWSlAAAA",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)",
 							"method": "GET",
 							"param": "sid",
 							"attack": "",
-							"evidence": "WIRY0lAUqD2iYl0rAAAH",
+							"evidence": "cAmfpShL7jraRWSlAAAA",
 							"otherinfo": ""
 						},
 						{
-							"id": "127",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=WIRY0lAUqD2iYl0rAAAH",
+							"id": "128",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=cAmfpShL7jraRWSlAAAA",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,transport)",
 							"method": "GET",
 							"param": "sid",
 							"attack": "",
-							"evidence": "WIRY0lAUqD2iYl0rAAAH",
+							"evidence": "cAmfpShL7jraRWSlAAAA",
 							"otherinfo": ""
 						},
 						{
-							"id": "121",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepMS&sid=WIRY0lAUqD2iYl0rAAAH",
+							"id": "143",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJhpr&sid=RFxzVcVqqjm-2xBfAAAC",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(40)",
 							"method": "POST",
 							"param": "sid",
 							"attack": "",
-							"evidence": "WIRY0lAUqD2iYl0rAAAH",
+							"evidence": "RFxzVcVqqjm-2xBfAAAC",
+							"otherinfo": ""
+						},
+						{
+							"id": "125",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgBk&sid=cAmfpShL7jraRWSlAAAA",
+							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(40)",
+							"method": "POST",
+							"param": "sid",
+							"attack": "",
+							"evidence": "cAmfpShL7jraRWSlAAAA",
 							"otherinfo": ""
 						},
 						{
 							"id": "132",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepPn&sid=WIRY0lAUqD2iYl0rAAAH",
-							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"9c297196ecf8...)",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgDl&sid=cAmfpShL7jraRWSlAAAA",
+							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"8d2072c6b0a4...)",
 							"method": "POST",
 							"param": "sid",
 							"attack": "",
-							"evidence": "WIRY0lAUqD2iYl0rAAAH",
-							"otherinfo": ""
-						},
-						{
-							"id": "129",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepOP&sid=WIRY0lAUqD2iYl0rAAAH",
-							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"b2bbb412cd02...)",
-							"method": "POST",
-							"param": "sid",
-							"attack": "",
-							"evidence": "WIRY0lAUqD2iYl0rAAAH",
+							"evidence": "cAmfpShL7jraRWSlAAAA",
 							"otherinfo": ""
 						}
 					],
@@ -2469,7 +1981,7 @@
 					"desc": "<p>Cross-Origin-Embedder-Policy header is a response header that prevents a document from loading any cross-origin resources that don't explicitly grant the document permission (using CORP or CORS).</p>",
 					"instances":[ 
 						{
-							"id": "33",
+							"id": "46",
 							"uri": "http://juiceshop:3000",
 							"nodeName": "http:\/\/juiceshop:3000",
 							"method": "GET",
@@ -2489,7 +2001,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "94",
+							"id": "102",
 							"uri": "http://juiceshop:3000/ftp",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp",
 							"method": "GET",
@@ -2499,9 +2011,9 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "106",
-							"uri": "http://juiceshop:3000/juice-shop/node_modules/express/lib/router/index.js:421:3",
-							"nodeName": "http:\/\/juiceshop:3000\/juice-shop\/node_modules\/express\/lib\/router\/index.js:421:3",
+							"id": "110",
+							"uri": "http://juiceshop:3000/juice-shop/build/routes/assets/public/favicon_js.ico",
+							"nodeName": "http:\/\/juiceshop:3000\/juice-shop\/build\/routes\/assets\/public\/favicon_js.ico",
 							"method": "GET",
 							"param": "Cross-Origin-Embedder-Policy",
 							"attack": "",
@@ -2509,7 +2021,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "30",
+							"id": "39",
 							"uri": "http://juiceshop:3000/sitemap.xml",
 							"nodeName": "http:\/\/juiceshop:3000\/sitemap.xml",
 							"method": "GET",
@@ -2526,7 +2038,7 @@
 					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cross-Origin-Embedder-Policy</p>",
 					"cweid": "693",
 					"wascid": "14",
-					"sourceid": "8"
+					"sourceid": "9"
 				},
 				{
 					"pluginid": "90004",
@@ -2539,7 +2051,7 @@
 					"desc": "<p>Cross-Origin-Opener-Policy header is a response header that allows a site to control if others included documents share the same browsing context. Sharing the same browsing context with untrusted documents might lead to data leak.</p>",
 					"instances":[ 
 						{
-							"id": "34",
+							"id": "49",
 							"uri": "http://juiceshop:3000",
 							"nodeName": "http:\/\/juiceshop:3000",
 							"method": "GET",
@@ -2559,7 +2071,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "95",
+							"id": "103",
 							"uri": "http://juiceshop:3000/ftp",
 							"nodeName": "http:\/\/juiceshop:3000\/ftp",
 							"method": "GET",
@@ -2569,9 +2081,9 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "112",
-							"uri": "http://juiceshop:3000/juice-shop/node_modules/express/lib/router/index.js:421:3",
-							"nodeName": "http:\/\/juiceshop:3000\/juice-shop\/node_modules\/express\/lib\/router\/index.js:421:3",
+							"id": "111",
+							"uri": "http://juiceshop:3000/juice-shop/build/routes/assets/public/favicon_js.ico",
+							"nodeName": "http:\/\/juiceshop:3000\/juice-shop\/build\/routes\/assets\/public\/favicon_js.ico",
 							"method": "GET",
 							"param": "Cross-Origin-Opener-Policy",
 							"attack": "",
@@ -2579,7 +2091,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "31",
+							"id": "41",
 							"uri": "http://juiceshop:3000/sitemap.xml",
 							"nodeName": "http:\/\/juiceshop:3000\/sitemap.xml",
 							"method": "GET",
@@ -2596,7 +2108,7 @@
 					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cross-Origin-Opener-Policy</p>",
 					"cweid": "693",
 					"wascid": "14",
-					"sourceid": "8"
+					"sourceid": "9"
 				},
 				{
 					"pluginid": "10110",
@@ -2609,7 +2121,7 @@
 					"desc": "<p>A dangerous JS function seems to be in use that would leave the site vulnerable.</p>",
 					"instances":[ 
 						{
-							"id": "163",
+							"id": "166",
 							"uri": "http://juiceshop:3000/about.component-CZcG2819.js",
 							"nodeName": "http:\/\/juiceshop:3000\/about.component-CZcG2819.js",
 							"method": "GET",
@@ -2619,7 +2131,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "141",
+							"id": "150",
 							"uri": "http://juiceshop:3000/chunk-eYAgyLdn.js",
 							"nodeName": "http:\/\/juiceshop:3000\/chunk-eYAgyLdn.js",
 							"method": "GET",
@@ -2646,7 +2158,7 @@
 					"reference": "<p>https://v17.angular.io/guide/security</p>",
 					"cweid": "749",
 					"wascid": "-1",
-					"sourceid": "370"
+					"sourceid": "361"
 				},
 				{
 					"pluginid": "10063",
@@ -2659,7 +2171,7 @@
 					"desc": "<p>The header has now been renamed to Permissions-Policy.</p>",
 					"instances":[ 
 						{
-							"id": "29",
+							"id": "42",
 							"uri": "http://juiceshop:3000",
 							"nodeName": "http:\/\/juiceshop:3000",
 							"method": "GET",
@@ -2679,7 +2191,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "64",
+							"id": "17",
 							"uri": "http://juiceshop:3000/polyfills.js",
 							"nodeName": "http:\/\/juiceshop:3000\/polyfills.js",
 							"method": "GET",
@@ -2699,7 +2211,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "26",
+							"id": "35",
 							"uri": "http://juiceshop:3000/sitemap.xml",
 							"nodeName": "http:\/\/juiceshop:3000\/sitemap.xml",
 							"method": "GET",
@@ -2716,7 +2228,7 @@
 					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy</p><p>https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/</p>",
 					"cweid": "16",
 					"wascid": "15",
-					"sourceid": "8"
+					"sourceid": "9"
 				},
 				{
 					"pluginid": "120001",
@@ -2729,8 +2241,8 @@
 					"desc": "<p>Sensitive Information appears to have been stored in browser localStorage. This can violate PCI and most organizational compliance policies.</p><p>For more details see the Client tabs - this information was set directly in the browser and will therefore not necessarily appear in this form in any HTTP(S) messages.</p>",
 					"instances":[ 
 						{
-							"id": "330",
-							"uri": "http://juiceshop:3000/#/about",
+							"id": "334",
+							"uri": "http://juiceshop:3000/#/login",
 							"nodeName": "http:\/\/juiceshop:3000\/",
 							"method": "GET",
 							"param": "email",
@@ -2746,7 +2258,7 @@
 					"reference": "",
 					"cweid": "359",
 					"wascid": "13",
-					"sourceid": "677"
+					"sourceid": "675"
 				},
 				{
 					"pluginid": "2",
@@ -2759,7 +2271,7 @@
 					"desc": "<p>A private IP (such as 10.x.x.x, 172.x.x.x, 192.168.x.x) or an Amazon EC2 private hostname (for example, ip-10-0-56-78) has been found in the HTTP response body. This information might be helpful for further attacks targeting internal systems.</p>",
 					"instances":[ 
 						{
-							"id": "117",
+							"id": "120",
 							"uri": "http://juiceshop:3000/rest/admin/application-configuration",
 							"nodeName": "http:\/\/juiceshop:3000\/rest\/admin\/application-configuration",
 							"method": "GET",
@@ -2776,7 +2288,7 @@
 					"reference": "<p>https://datatracker.ietf.org/doc/html/rfc1918</p>",
 					"cweid": "497",
 					"wascid": "13",
-					"sourceid": "178"
+					"sourceid": "175"
 				},
 				{
 					"pluginid": "10096",
@@ -2789,7 +2301,7 @@
 					"desc": "<p>A timestamp was disclosed by the application/web server. - Unix</p>",
 					"instances":[ 
 						{
-							"id": "21",
+							"id": "32",
 							"uri": "http://juiceshop:3000",
 							"nodeName": "http:\/\/juiceshop:3000",
 							"method": "GET",
@@ -2819,7 +2331,7 @@
 							"otherinfo": "1839622642, which evaluates to: 2028-04-17 22:17:22."
 						},
 						{
-							"id": "19",
+							"id": "25",
 							"uri": "http://juiceshop:3000/sitemap.xml",
 							"nodeName": "http:\/\/juiceshop:3000\/sitemap.xml",
 							"method": "GET",
@@ -2829,7 +2341,7 @@
 							"otherinfo": "1666666667, which evaluates to: 2022-10-25 02:57:47."
 						},
 						{
-							"id": "22",
+							"id": "27",
 							"uri": "http://juiceshop:3000/sitemap.xml",
 							"nodeName": "http:\/\/juiceshop:3000\/sitemap.xml",
 							"method": "GET",
@@ -2846,7 +2358,7 @@
 					"reference": "<p>https://cwe.mitre.org/data/definitions/200.html</p>",
 					"cweid": "497",
 					"wascid": "13",
-					"sourceid": "8"
+					"sourceid": "9"
 				},
 				{
 					"pluginid": "10021",
@@ -2859,8 +2371,8 @@
 					"desc": "<p>The Anti-MIME-Sniffing header X-Content-Type-Options was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.</p>",
 					"instances":[ 
 						{
-							"id": "124",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepMT&sid=WIRY0lAUqD2iYl0rAAAH",
+							"id": "130",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgBl&sid=cAmfpShL7jraRWSlAAAA",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)",
 							"method": "GET",
 							"param": "x-content-type-options",
@@ -2869,8 +2381,8 @@
 							"otherinfo": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses."
 						},
 						{
-							"id": "116",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepKt",
+							"id": "119",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgAR",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,t,transport)",
 							"method": "GET",
 							"param": "x-content-type-options",
@@ -2879,8 +2391,8 @@
 							"otherinfo": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses."
 						},
 						{
-							"id": "122",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepMS&sid=WIRY0lAUqD2iYl0rAAAH",
+							"id": "126",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgBk&sid=cAmfpShL7jraRWSlAAAA",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(40)",
 							"method": "POST",
 							"param": "x-content-type-options",
@@ -2890,18 +2402,8 @@
 						},
 						{
 							"id": "133",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepPn&sid=WIRY0lAUqD2iYl0rAAAH",
-							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"9c297196ecf8...)",
-							"method": "POST",
-							"param": "x-content-type-options",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses."
-						},
-						{
-							"id": "130",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepOP&sid=WIRY0lAUqD2iYl0rAAAH",
-							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"b2bbb412cd02...)",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgDl&sid=cAmfpShL7jraRWSlAAAA",
+							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"8d2072c6b0a4...)",
 							"method": "POST",
 							"param": "x-content-type-options",
 							"attack": "",
@@ -2909,7 +2411,7 @@
 							"otherinfo": "This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.\nAt \"High\" threshold this scan rule will not alert on client or server error responses."
 						}
 					],
-					"count": "5",
+					"count": "4",
 					"systemic": false,
 					"solution": "<p>Ensure that the application/web server sets the Content-Type header appropriately, and that it sets the X-Content-Type-Options header to 'nosniff' for all web pages.</p><p>If possible, ensure that the end user uses a standards-compliant and modern web browser that does not perform MIME-sniffing at all, or that can be directed by the web application/web server to not perform MIME-sniffing.</p>",
 					"otherinfo": "<p>This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.</p><p>At \"High\" threshold this scan rule will not alert on client or server error responses.</p>",
@@ -2929,64 +2431,54 @@
 					"desc": "<p>Cross-Origin Resource Sharing (CORS) is an HTTP-header based mechanism that allows a server to indicate any other origins (domain, scheme, or port) than its own from which a browser should permit loading of resources. It relaxes the Same-Origin Policy (SOP).</p>",
 					"instances":[ 
 						{
-							"id": "654",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HfDtx&sid=ZOOsCOE7_VRYUa50AAAV",
+							"id": "597",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJvxq&sid=zlXf6kM4Z6lA6BFSAAAK",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)",
 							"method": "GET",
 							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
+							"attack": "origin: http://4m4e2Om4.com",
 							"evidence": "",
 							"otherinfo": ""
 						},
 						{
-							"id": "653",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HfDeJ",
+							"id": "596",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJvLd",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,t,transport)",
 							"method": "GET",
 							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
+							"attack": "origin: http://4m4e2Om4.com",
 							"evidence": "",
 							"otherinfo": ""
 						},
 						{
-							"id": "666",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0Hf70b&sid=pq7KSufD_lwbNwYDAAAR",
-							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(1)",
-							"method": "POST",
-							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
-							"evidence": "",
-							"otherinfo": ""
-						},
-						{
-							"id": "667",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HfDpG&sid=ZOOsCOE7_VRYUa50AAAV",
+							"id": "608",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJvbT&sid=zlXf6kM4Z6lA6BFSAAAK",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(40)",
 							"method": "POST",
 							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
+							"attack": "origin: http://4m4e2Om4.com",
 							"evidence": "",
 							"otherinfo": ""
 						},
 						{
-							"id": "668",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HepPn&sid=WIRY0lAUqD2iYl0rAAAH",
-							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"9c297196ecf8...)",
+							"id": "609",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJgDl&sid=cAmfpShL7jraRWSlAAAA",
+							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)(42[\"notification received\",\"8d2072c6b0a4...)",
 							"method": "POST",
 							"param": "",
-							"attack": "origin: http://Mqzab6Ck.com",
+							"attack": "origin: http://4m4e2Om4.com",
 							"evidence": "",
 							"otherinfo": ""
 						}
 					],
-					"count": "5",
-					"systemic": true,
+					"count": "4",
+					"systemic": false,
 					"solution": "<p>If a web resource contains sensitive information, the origin should be properly specified in the Access-Control-Allow-Origin header. Only trusted websites needing this resource should be specified in this header, with the most secured protocol supported.</p>",
 					"otherinfo": "",
 					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS</p><p>https://portswigger.net/web-security/cors</p>",
 					"cweid": "942",
 					"wascid": "14",
-					"sourceid": "30801"
+					"sourceid": "24535"
 				},
 				{
 					"pluginid": "90027",
@@ -2999,7 +2491,7 @@
 					"desc": "<p>Repeated GET requests: drop a different cookie each time, followed by normal request with all cookies to stabilize session, compare responses against original baseline GET. This can reveal areas where cookie based authentication/attributes are not actually enforced.</p>",
 					"instances":[ 
 						{
-							"id": "884",
+							"id": "772",
 							"uri": "http://juiceshop:3000/rest/captcha/",
 							"nodeName": "http:\/\/juiceshop:3000\/rest\/captcha\/",
 							"method": "GET",
@@ -3009,7 +2501,7 @@
 							"otherinfo": "Dropping this cookie appears to have invalidated the session: [continueCode] A follow-on request with all original cookies still had a different response than the original request.\n"
 						},
 						{
-							"id": "883",
+							"id": "771",
 							"uri": "http://juiceshop:3000/rest/memories/",
 							"nodeName": "http:\/\/juiceshop:3000\/rest\/memories\/",
 							"method": "GET",
@@ -3019,34 +2511,34 @@
 							"otherinfo": "Cookies that don't have expected effects can reveal flaws in application logic. In the worst case, this can reveal where authentication via cookie token(s) is not actually enforced.\nThese cookies affected the response: \nThese cookies did NOT affect the response: continueCode,language\n"
 						},
 						{
-							"id": "882",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HfDtx&sid=ZOOsCOE7_VRYUa50AAAV",
+							"id": "770",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJvxq&sid=zlXf6kM4Z6lA6BFSAAAK",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,t,transport)",
 							"method": "GET",
 							"param": "",
 							"attack": "",
 							"evidence": "",
-							"otherinfo": "Dropping this cookie appears to have invalidated the session: [continueCode] A follow-on request with all original cookies still had a different response than the original request.\n"
+							"otherinfo": "Dropping this cookie appears to have invalidated the session: [language] A follow-on request with all original cookies still had a different response than the original request.\n"
 						},
 						{
-							"id": "880",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=ZOOsCOE7_VRYUa50AAAV",
+							"id": "768",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=zlXf6kM4Z6lA6BFSAAAK",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,transport)",
 							"method": "GET",
 							"param": "",
 							"attack": "",
 							"evidence": "",
-							"otherinfo": "Dropping this cookie appears to have invalidated the session: [continueCode] A follow-on request with all original cookies still had a different response than the original request.\n"
+							"otherinfo": "Dropping this cookie appears to have invalidated the session: [language] A follow-on request with all original cookies still had a different response than the original request.\n"
 						},
 						{
-							"id": "881",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HfDeJ",
+							"id": "769",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJvLd",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,t,transport)",
 							"method": "GET",
 							"param": "",
 							"attack": "",
 							"evidence": "",
-							"otherinfo": "Cookies that don't have expected effects can reveal flaws in application logic. In the worst case, this can reveal where authentication via cookie token(s) is not actually enforced.\nThese cookies affected the response: \nThese cookies did NOT affect the response: continueCode,language\n"
+							"otherinfo": "Cookies that don't have expected effects can reveal flaws in application logic. In the worst case, this can reveal where authentication via cookie token(s) is not actually enforced.\nThese cookies affected the response: \nThese cookies did NOT affect the response: language\n"
 						}
 					],
 					"count": "5",
@@ -3056,7 +2548,7 @@
 					"reference": "<p>https://cwe.mitre.org/data/definitions/205.html</p>",
 					"cweid": "205",
 					"wascid": "45",
-					"sourceid": "31635"
+					"sourceid": "25196"
 				},
 				{
 					"pluginid": "120000",
@@ -3069,8 +2561,8 @@
 					"desc": "<p>Information was stored in browser localStorage.</p><p>This is not unusual or necessarily unsafe - this informational alert has been raised to help you get a better understanding of what this app is doing. For more details see the Client tabs - this information was set directly in the browser and will therefore not necessarily appear in this form in any HTTP(S) messages.</p>",
 					"instances":[ 
 						{
-							"id": "329",
-							"uri": "http://juiceshop:3000/#/about",
+							"id": "333",
+							"uri": "http://juiceshop:3000/#/login",
 							"nodeName": "http:\/\/juiceshop:3000\/",
 							"method": "GET",
 							"param": "email",
@@ -3086,37 +2578,7 @@
 					"reference": "",
 					"cweid": "359",
 					"wascid": "13",
-					"sourceid": "677"
-				},
-				{
-					"pluginid": "120000",
-					"alertRef": "120000-2",
-					"alert": "Information Disclosure - Information in Browser sessionStorage",
-					"name": "Information Disclosure - Information in Browser sessionStorage",
-					"riskcode": "0",
-					"confidence": "3",
-					"riskdesc": "Informational (High)",
-					"desc": "<p>Information was stored in browser sessionStorage.</p><p>This is not unusual or necessarily unsafe - this informational alert has been raised to help you get a better understanding of what this app is doing. For more details see the Client tabs - this information was set directly in the browser and will therefore not necessarily appear in this form in any HTTP(S) messages.</p>",
-					"instances":[ 
-						{
-							"id": "345",
-							"uri": "http://juiceshop:3000/#/basket",
-							"nodeName": "http:\/\/juiceshop:3000\/",
-							"method": "GET",
-							"param": "itemTotal",
-							"attack": "",
-							"evidence": "",
-							"otherinfo": "The following data (key=value) was set: itemTotal=0\nNote that this alert will only be raised once for each URL + key."
-						}
-					],
-					"count": "1",
-					"systemic": false,
-					"solution": "<p>This is an informational alert and no action is necessary. </p>",
-					"otherinfo": "<p>The following data (key=value) was set: itemTotal=0</p><p>Note that this alert will only be raised once for each URL + key.</p>",
-					"reference": "",
-					"cweid": "359",
-					"wascid": "13",
-					"sourceid": "677"
+					"sourceid": "675"
 				},
 				{
 					"pluginid": "10109",
@@ -3129,7 +2591,7 @@
 					"desc": "<p>The application appears to be a modern web application. If you need to explore it automatically then the Client Spider may well be more effective than the standard one.</p>",
 					"instances":[ 
 						{
-							"id": "18",
+							"id": "28",
 							"uri": "http://juiceshop:3000",
 							"nodeName": "http:\/\/juiceshop:3000",
 							"method": "GET",
@@ -3149,9 +2611,9 @@
 							"otherinfo": "No links have been found while there are scripts, which is an indication that this is a modern web application."
 						},
 						{
-							"id": "103",
-							"uri": "http://juiceshop:3000/juice-shop/build/routes/fileServer.js:68:18",
-							"nodeName": "http:\/\/juiceshop:3000\/juice-shop\/build\/routes\/fileServer.js:68:18",
+							"id": "107",
+							"uri": "http://juiceshop:3000/juice-shop/build/routes/assets/public/favicon_js.ico",
+							"nodeName": "http:\/\/juiceshop:3000\/juice-shop\/build\/routes\/assets\/public\/favicon_js.ico",
 							"method": "GET",
 							"param": "",
 							"attack": "",
@@ -3159,9 +2621,9 @@
 							"otherinfo": "No links have been found while there are scripts, which is an indication that this is a modern web application."
 						},
 						{
-							"id": "102",
-							"uri": "http://juiceshop:3000/juice-shop/node_modules/express/lib/router/index.js:421:3",
-							"nodeName": "http:\/\/juiceshop:3000\/juice-shop\/node_modules\/express\/lib\/router\/index.js:421:3",
+							"id": "108",
+							"uri": "http://juiceshop:3000/juice-shop/node_modules/express/lib/router/index.js:286:9",
+							"nodeName": "http:\/\/juiceshop:3000\/juice-shop\/node_modules\/express\/lib\/router\/index.js:286:9",
 							"method": "GET",
 							"param": "",
 							"attack": "",
@@ -3169,7 +2631,7 @@
 							"otherinfo": "No links have been found while there are scripts, which is an indication that this is a modern web application."
 						},
 						{
-							"id": "17",
+							"id": "21",
 							"uri": "http://juiceshop:3000/sitemap.xml",
 							"nodeName": "http:\/\/juiceshop:3000\/sitemap.xml",
 							"method": "GET",
@@ -3186,7 +2648,67 @@
 					"reference": "",
 					"cweid": "-1",
 					"wascid": "-1",
-					"sourceid": "8"
+					"sourceid": "9"
+				},
+				{
+					"pluginid": "10049",
+					"alertRef": "10049-1",
+					"alert": "Non-Storable Content",
+					"name": "Non-Storable Content",
+					"riskcode": "0",
+					"confidence": "2",
+					"riskdesc": "Informational (Medium)",
+					"desc": "<p>The response contents are not storable by caching components such as proxy servers. If the response does not contain sensitive, personal or user-specific information, it may benefit from being stored and cached, to improve performance.</p>",
+					"instances":[ 
+						{
+							"id": "95",
+							"uri": "http://juiceshop:3000/ftp/eastere.gg",
+							"nodeName": "http:\/\/juiceshop:3000\/ftp\/eastere.gg",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "403",
+							"otherinfo": ""
+						},
+						{
+							"id": "89",
+							"uri": "http://juiceshop:3000/ftp/encrypt.pyc",
+							"nodeName": "http:\/\/juiceshop:3000\/ftp\/encrypt.pyc",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "403",
+							"otherinfo": ""
+						},
+						{
+							"id": "96",
+							"uri": "http://juiceshop:3000/ftp/package-lock.json.bak",
+							"nodeName": "http:\/\/juiceshop:3000\/ftp\/package-lock.json.bak",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "403",
+							"otherinfo": ""
+						},
+						{
+							"id": "91",
+							"uri": "http://juiceshop:3000/ftp/package.json.bak",
+							"nodeName": "http:\/\/juiceshop:3000\/ftp\/package.json.bak",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "403",
+							"otherinfo": ""
+						}
+					],
+					"count": "4",
+					"systemic": false,
+					"solution": "<p>The content may be marked as storable by ensuring that the following conditions are satisfied:</p><p>The request method must be understood by the cache and defined as being cacheable (\"GET\", \"HEAD\", and \"POST\" are currently defined as cacheable)</p><p>The response status code must be understood by the cache (one of the 1XX, 2XX, 3XX, 4XX, or 5XX response classes are generally understood)</p><p>The \"no-store\" cache directive must not appear in the request or response header fields</p><p>For caching by \"shared\" caches such as \"proxy\" caches, the \"private\" response directive must not appear in the response</p><p>For caching by \"shared\" caches such as \"proxy\" caches, the \"Authorization\" header field must not appear in the request, unless the response explicitly allows it (using one of the \"must-revalidate\", \"public\", or \"s-maxage\" Cache-Control response directives)</p><p>In addition to the conditions above, at least one of the following conditions must also be satisfied by the response:</p><p>It must contain an \"Expires\" header field</p><p>It must contain a \"max-age\" response directive</p><p>For \"shared\" caches such as \"proxy\" caches, it must contain a \"s-maxage\" response directive</p><p>It must contain a \"Cache Control Extension\" that allows it to be cached</p><p>It must have a status code that is defined as cacheable by default (200, 203, 204, 206, 300, 301, 404, 405, 410, 414, 501).</p>",
+					"otherinfo": "",
+					"reference": "<p>https://datatracker.ietf.org/doc/html/rfc7234</p><p>https://datatracker.ietf.org/doc/html/rfc7231</p><p>https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html</p>",
+					"cweid": "524",
+					"wascid": "13",
+					"sourceid": "39"
 				},
 				{
 					"pluginid": "10049",
@@ -3199,7 +2721,7 @@
 					"desc": "<p>The response contents are storable by caching components such as proxy servers, and may be retrieved directly from the cache, rather than from the origin server by the caching servers, in response to similar requests from other users. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where \"shared\" caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.</p>",
 					"instances":[ 
 						{
-							"id": "10",
+							"id": "12",
 							"uri": "http://juiceshop:3000/robots.txt",
 							"nodeName": "http:\/\/juiceshop:3000\/robots.txt",
 							"method": "GET",
@@ -3229,7 +2751,7 @@
 					"desc": "<p>The response contents are storable by caching components such as proxy servers, but will not be retrieved directly from the cache, without validating the request upstream, in response to similar requests from other users.</p>",
 					"instances":[ 
 						{
-							"id": "27",
+							"id": "38",
 							"uri": "http://juiceshop:3000",
 							"nodeName": "http:\/\/juiceshop:3000",
 							"method": "GET",
@@ -3249,7 +2771,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "42",
+							"id": "13",
 							"uri": "http://juiceshop:3000/assets/public/favicon_js.ico",
 							"nodeName": "http:\/\/juiceshop:3000\/assets\/public\/favicon_js.ico",
 							"method": "GET",
@@ -3259,7 +2781,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "56",
+							"id": "15",
 							"uri": "http://juiceshop:3000/polyfills.js",
 							"nodeName": "http:\/\/juiceshop:3000\/polyfills.js",
 							"method": "GET",
@@ -3269,7 +2791,7 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "24",
+							"id": "34",
 							"uri": "http://juiceshop:3000/sitemap.xml",
 							"nodeName": "http:\/\/juiceshop:3000\/sitemap.xml",
 							"method": "GET",
@@ -3286,7 +2808,7 @@
 					"reference": "<p>https://datatracker.ietf.org/doc/html/rfc7234</p><p>https://datatracker.ietf.org/doc/html/rfc7231</p><p>https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html</p>",
 					"cweid": "524",
 					"wascid": "13",
-					"sourceid": "8"
+					"sourceid": "9"
 				},
 				{
 					"pluginid": "10104",
@@ -3299,8 +2821,8 @@
 					"desc": "<p>Check for differences in response based on fuzzed User Agent (eg. mobile sites, access as a Search Engine Crawler). Compares the response statuscode and the hashcode of the response body with the original response.</p>",
 					"instances":[ 
 						{
-							"id": "391",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=ZOOsCOE7_VRYUa50AAAV",
+							"id": "359",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=zlXf6kM4Z6lA6BFSAAAK",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,transport)",
 							"method": "GET",
 							"param": "Header User-Agent",
@@ -3309,8 +2831,8 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "389",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=ZOOsCOE7_VRYUa50AAAV",
+							"id": "357",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=zlXf6kM4Z6lA6BFSAAAK",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,transport)",
 							"method": "GET",
 							"param": "Header User-Agent",
@@ -3319,8 +2841,8 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "387",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=ZOOsCOE7_VRYUa50AAAV",
+							"id": "356",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=websocket&sid=zlXf6kM4Z6lA6BFSAAAK",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,sid,transport)",
 							"method": "GET",
 							"param": "Header User-Agent",
@@ -3329,8 +2851,8 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "390",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HfDeJ",
+							"id": "358",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJvLd",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,t,transport)",
 							"method": "GET",
 							"param": "Header User-Agent",
@@ -3339,8 +2861,8 @@
 							"otherinfo": ""
 						},
 						{
-							"id": "388",
-							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0HfDeJ",
+							"id": "355",
+							"uri": "http://juiceshop:3000/socket.io/?EIO=4&transport=polling&t=Q0BJvLd",
 							"nodeName": "http:\/\/juiceshop:3000\/socket.io\/ (EIO,t,transport)",
 							"method": "GET",
 							"param": "Header User-Agent",
@@ -3356,7 +2878,7 @@
 					"reference": "<p>https://owasp.org/wstg</p>",
 					"cweid": "0",
 					"wascid": "0",
-					"sourceid": "15646"
+					"sourceid": "12955"
 				}
 			]
 		}

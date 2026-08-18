@@ -75,12 +75,22 @@ class Validator:
 
             if outcome.verdict is not None:
                 break
-            if not (self.agent and self.agent.enabled) or attempts >= self.max_attempts:
+
+            can_adapt = bool(self.agent and self.agent.enabled) and attempts < self.max_attempts
+            if not can_adapt:
+                if not self.agent:
+                    skip = "adaptive did not run (disabled)"
+                elif not self.agent.enabled:
+                    skip = "adaptive did not run · LLM unavailable (no API key)"
+                else:
+                    skip = "budget exhausted · no further retries"
+                _record_adaptive_skip(trace, attempts, skip)
                 break
 
             # --- adaptive: diagnose why it failed and craft the next attempt ---
             diag = self.agent.diagnose(finding, brief, steps, results, trace)
             if diag is None:
+                _record_adaptive_skip(trace, attempts, "LLM unavailable · diagnose call failed")
                 break
             trace.append({
                 "n": attempts, "kind": "diagnose",
@@ -134,6 +144,23 @@ class Validator:
             elapsed_s=round(time.perf_counter() - started, 2),
             proof=proof or [], trace=trace or [],
         )
+
+
+def _record_adaptive_skip(trace: list[dict], attempts: int, reason: str) -> None:
+    """Keep a diagnose node in the lineage even when the LLM never ran.
+
+    The UI draws the budget-gate / LLM branch from this trace entry (and from
+    oracle.interim). Without it, a settle-to-inconclusive event used to wipe
+    the extra nodes so the graph collapsed back to a single deterministic lane.
+    """
+    trace.append({
+        "n": attempts,
+        "kind": "diagnose",
+        "reasoning": reason,
+        "hypotheses": [{"cause": reason, "confidence": 0.0}],
+        "giveup": True,
+    })
+    log.info("    adaptive skip: %s", reason)
 
 
 def _payload_of(step: Step) -> str:

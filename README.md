@@ -116,7 +116,7 @@ verdict stamps included. It's the same view as the animation, but you drive it.
 
 ## Live console (UI + API)
 
-`src/Ops Layer - UI/verdict-flow` is a React (TanStack Start) console that shows
+`ui/` is a React (TanStack Start) console that shows
 every finding being validated as a **living lineage** — nodes light up, packets
 travel Host → Sandbox → Target → Oracle, verdicts stamp in, and the scorecard's
 FP-rate ticks up. It runs in two modes:
@@ -134,7 +134,7 @@ pip install -e ".[api]"
 ./scripts/serve_api.sh
 
 # 2) UI
-cd "src/Ops Layer - UI/verdict-flow"
+cd ui
 cp .env.example .env          # VITE_API_BASE=http://localhost:8000
 npm install && npm run dev
 ```
@@ -222,6 +222,42 @@ ADAPTIVE_MODEL=openai:gpt-4.1
 OPENAI_API_KEY=...
 ```
 
+### Live API (console)
+
+The UI talks to `crucible-api` on `:8000`. Adaptive retries only fire if **that
+process** sees a matching provider key — not just because `.env` exists on disk.
+
+```bash
+cp .env.example .env          # paste OPENAI_API_KEY (must be non-empty)
+# ADAPTIVE_MODEL=openai:gpt-4.1
+./scripts/serve_api.sh        # prefers .venv/bin/python; loads .env at startup
+```
+
+Confirm in the API log (or `GET /health`):
+
+```
+adaptive layer enabled (openai:gpt-4.1)
+```
+
+If you instead see:
+
+```
+no API key for 'openai' -> adaptive layer disabled (deterministic-only)
+```
+
+then `/rest/products/search` SQLi stays **INCONCLUSIVE** after the deterministic
+pass (the known 2-confirmed / 1-inconclusive Juice Shop scorecard). Restart the
+API after editing `.env`. Anaconda `python` is fine as long as the process env
+has the key; `serve_api.sh` now prefers `.venv` when present.
+
+Live validation needs a **raw ZAP JSON** upload (`site: [...]`), not
+`validation_report.json` (that path is replay-only and never re-runs the
+validator). Target URL:
+
+- Docker sandbox (default): `http://juiceshop:3000` — Juice Shop must be on the
+  `pentest` Docker network.
+- Host executor: set backend to **Local** and target `http://localhost:3000`.
+
 ## Output
 
 - Console: a scorecard (confirmed / false positives / FP-rate).
@@ -234,7 +270,7 @@ OPENAI_API_KEY=...
 ```
 src/crucible/                 Python package (validator)
 src/crucible/api.py           live SSE backend for the console
-src/Ops Layer - UI/           React console (mock + live API)
+ui/                           React console (mock + live API)
 data/zap/juiceshop/           ZAP reports (input)
 data/output/juiceshop/        validation report + LLM trace (committed sample)
 scripts/                      Juice Shop + ZAP helpers, serve_api.sh

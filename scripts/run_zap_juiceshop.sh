@@ -78,27 +78,24 @@ case "$SCAN" in
 esac
 info "Scan mode: ${SCAN} (${ZAP_SCRIPT})  ->  report: ${REPORT}"
 
-# ---- 1. cleanup our own leftovers BEFORE the port check -------------------
-step "Cleaning up any previous run"
-# Stop any running ZAP scan containers (only one scan at a time)
+# ---- 1. do not clobber an in-flight scan or a live Juice Shop -------------
+step "Preflight: existing Juice Shop / ZAP"
 zap_running="$(docker ps -q --filter ancestor="${ZAP_IMAGE}" 2>/dev/null || true)"
 if [ -n "${zap_running}" ]; then
-  info "Stopping in-flight ZAP container(s): ${zap_running}"
-  docker stop ${zap_running} >/dev/null 2>&1 || true
-fi
-# Remove existing juiceshop container so it doesn't hold the port / go stale
-if docker ps -a --format '{{.Names}}' | grep -qx "${JUICE_NAME}"; then
-  info "Removing existing '${JUICE_NAME}' container."
-  docker rm -f "${JUICE_NAME}" >/dev/null
+  die "A ZAP scan is already running (${zap_running}). Not starting a second one."
 fi
 
-# ---- 2. port check (now that our container is gone) -----------------------
-if lsof -iTCP:"${HOST_PORT}" -sTCP:LISTEN -n -P >/dev/null 2>&1; then
-  die "Port ${HOST_PORT} is in use by something else. Free it or set HOST_PORT=<other>."
+JUICE_RUNNING=0
+if docker ps --format '{{.Names}}' | grep -qx "${JUICE_NAME}"; then
+  if curl -sf "http://localhost:${HOST_PORT}" >/dev/null 2>&1; then
+    info "Reusing healthy '${JUICE_NAME}' on 127.0.0.1:${HOST_PORT} (will not docker rm)."
+    JUICE_RUNNING=1
+  else
+    die "'${JUICE_NAME}' is up but not responding on :${HOST_PORT}. Not killing it (a live validation may be using it)."
+  fi
 fi
-info "Port ${HOST_PORT} is free."
 
-# ---- 3. isolated network --------------------------------------------------
+# ---- 2–5. network + Juice Shop (skip start when already healthy) ----------
 step "Ensuring Docker network '${NETWORK}' exists"
 if docker network inspect "${NETWORK}" >/dev/null 2>&1; then
   info "Network already exists — reusing it."
@@ -107,23 +104,40 @@ else
   info "Created network '${NETWORK}'."
 fi
 
-# ---- 4. start Juice Shop, localhost-only ----------------------------------
-step "Starting Juice Shop (${JUICE_IMAGE})"
-docker run -d --name "${JUICE_NAME}" --network "${NETWORK}" \
-  -p 127.0.0.1:"${HOST_PORT}":3000 "${JUICE_IMAGE}" >/dev/null
-info "Container started. Local (host) access: http://localhost:${HOST_PORT}"
-
-# ---- 5. wait for readiness (avoid the startup race) -----------------------
-step "Waiting for Juice Shop to become ready (max ${BOOT_TIMEOUT}s)"
-deadline=$(( $(date +%s) + BOOT_TIMEOUT ))
-until curl -sf "http://localhost:${HOST_PORT}" >/dev/null 2>&1; do
-  if [ "$(date +%s)" -ge "${deadline}" ]; then
-    docker logs --tail 30 "${JUICE_NAME}" || true
-    die "Juice Shop did not come up within ${BOOT_TIMEOUT}s (logs above)."
+if [ "${JUICE_RUNNING}" = "1" ]; then
+  # Attach to the scan network if a previous run left juiceshop on another net.
+  if ! docker inspect "${JUICE_NAME}" --format '{{json .NetworkSettings.Networks}}' \
+      | grep -q "\"${NETWORK}\""; then
+    info "Connecting '${JUICE_NAME}' to network '${NETWORK}'."
+    docker network connect "${NETWORK}" "${JUICE_NAME}" >/dev/null
   fi
-  sleep 2
-done
-info "Juice Shop is ready."
+  info "Juice Shop is ready (reused)."
+else
+  if docker ps -a --format '{{.Names}}' | grep -qx "${JUICE_NAME}"; then
+    info "Removing stopped '${JUICE_NAME}' container."
+    docker rm -f "${JUICE_NAME}" >/dev/null
+  fi
+  if lsof -iTCP:"${HOST_PORT}" -sTCP:LISTEN -n -P >/dev/null 2>&1; then
+    die "Port ${HOST_PORT} is in use by something else. Free it or set HOST_PORT=<other>."
+  fi
+  info "Port ${HOST_PORT} is free."
+
+  step "Starting Juice Shop (${JUICE_IMAGE})"
+  docker run -d --name "${JUICE_NAME}" --network "${NETWORK}" \
+    -p 127.0.0.1:"${HOST_PORT}":3000 "${JUICE_IMAGE}" >/dev/null
+  info "Container started. Local (host) access: http://localhost:${HOST_PORT}"
+
+  step "Waiting for Juice Shop to become ready (max ${BOOT_TIMEOUT}s)"
+  deadline=$(( $(date +%s) + BOOT_TIMEOUT ))
+  until curl -sf "http://localhost:${HOST_PORT}" >/dev/null 2>&1; do
+    if [ "$(date +%s)" -ge "${deadline}" ]; then
+      docker logs --tail 30 "${JUICE_NAME}" || true
+      die "Juice Shop did not come up within ${BOOT_TIMEOUT}s (logs above)."
+    fi
+    sleep 2
+  done
+  info "Juice Shop is ready."
+fi
 
 # ---- 6. run the ZAP scan --------------------------------------------------
 step "Running ZAP ${SCAN} scan against ${TARGET}"
